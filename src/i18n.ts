@@ -107,13 +107,22 @@ export const dict = {
     en: 'Two millionaires want to know who is richer without revealing how much they have. Set each fortune below and run the protocol. The only thing revealed is the answer to “who is richer?” — never the amounts.',
     ja: '2人の百万長者が、自分の財産額を明かさずに「どちらがお金持ちか」だけを知りたい。下で各自の財産を設定し、プロトコルを実行してください。明かされるのは「どちらが上か」という答えだけで、金額そのものは決して出てきません。',
   },
+  mDisclaimer: {
+    en: 'Note: unlike the other sections, the comparison here is a simplified local simulation — the hex labels are an illustration of garbled wires, not a real protocol transcript.',
+    ja: '注：このセクションだけは比較をローカルで行う簡略シミュレーションです。16進ラベルはガーブルされたワイヤの「イメージ図」で、実際の通信内容ではありません。',
+  },
   mAliceLabel: { en: "Alice's fortune", ja: 'アリスの財産' },
   mBobLabel: { en: "Bob's fortune", ja: 'ボブの財産' },
   mRun: { en: 'Find out who is richer', ja: 'どちらが上か判定' },
-  mResultAlice: { en: 'Alice is richer (or equal).', ja: 'アリスの方が上（または同額）。' },
+  mResultAlice: { en: 'Alice is richer.', ja: 'アリスの方が上。' },
   mResultBob: { en: 'Bob is richer.', ja: 'ボブの方が上。' },
-  mResultHidden: { en: 'Amounts stayed hidden the whole time.', ja: '金額は最後まで隠されたままでした。' },
-  mGarbled: { en: 'What each party actually saw (garbled)', ja: '各パーティが実際に見たもの（ガーブル済み）' },
+  mResultEqual: { en: 'They are equally rich.', ja: '2人は同額でした。' },
+  mResultHidden: { en: 'The amounts were never revealed — only the answer.', ja: '金額は一度も明かされず、答えだけが分かりました。' },
+  mBarsNote: {
+    en: 'Only relative length is shown — the exact amounts stay hidden.',
+    ja: '見せるのは相対的な長さだけ。正確な金額は隠したままです。',
+  },
+  mGarbled: { en: 'Illustrative opaque labels (not a real transcript)', ja: 'イメージ図：不可読なラベル（実通信ではありません）' },
 
   // --- 詳細トグル ---
   showDetail: { en: 'Show the math', ja: '数式を見る' },

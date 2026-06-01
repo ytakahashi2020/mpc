@@ -1,22 +1,36 @@
 // MPC の中核ロジック。すべて有限体 Z_p 上の実際の演算として実装する。
 // 教育用に小さめの素数を使い、シェアや合計が画面に収まるようにしている。
 
-// 体の位数。デモ用に十分大きく、かつ表示しやすい素数を選ぶ。
-export const FIELD_P = 2741
+// 体の位数。デモ用に表示しやすく、かつ「入力の素直な合計」より十分大きい素数を選ぶ。
+// 各セクションの入力上限（最大4パーティ × 500 = 2000）を超えるよう 7919 を採用し、
+// 「本当の合計 / 単純な合計」ラベルが mod により別の値になってしまうのを防ぐ。
+export const FIELD_P = 7919
 
-// 0 以上 max 未満の擬似乱数整数。シード可能にして「引き直し」を再現可能にする。
-// （Math.random は使わず、線形合同法で seed から決定的に生成する）
-export function makeRng(seed: number) {
-  let state = (seed >>> 0) || 1
+// 乱数源。デモの「シェアは真に一様・秘密と独立」という主張を本当に成り立たせるため、
+// ブラウザの暗号学的乱数(crypto.getRandomValues)を使う。無い環境では Math.random に退避。
+// 戻り値は [0,1) の関数で、呼び出し側のインターフェースは従来どおり。
+export function makeRng(_seed?: number) {
+  void _seed // seed は「引き直し」をトリガするためだけに使い、乱数自体には混ぜない（秘密非依存）
+  const cryptoObj = typeof globalThis !== 'undefined' ? (globalThis.crypto as Crypto | undefined) : undefined
   return () => {
-    // 32bit LCG (Numerical Recipes 係数)
-    state = (state * 1664525 + 1013904223) >>> 0
-    return state / 0x100000000
+    if (cryptoObj && cryptoObj.getRandomValues) {
+      const buf = new Uint32Array(1)
+      cryptoObj.getRandomValues(buf)
+      return buf[0] / 0x100000000
+    }
+    return Math.random()
   }
 }
 
+// 0 以上 maxExclusive 未満の一様乱数整数。剰余バイアスを避けるため棄却サンプリングする。
 export function randInt(rng: () => number, maxExclusive: number): number {
-  return Math.floor(rng() * maxExclusive)
+  // [0, 2^32) を maxExclusive で割り切れる範囲に丸め、はみ出した値は捨てる。
+  const limit = Math.floor(0x100000000 / maxExclusive) * maxExclusive
+  let x: number
+  do {
+    x = Math.floor(rng() * 0x100000000)
+  } while (x >= limit)
+  return x % maxExclusive
 }
 
 // 正の剰余（負数にも対応）。
@@ -75,18 +89,13 @@ export function localSums(matrix: number[][]): number[] {
   return sums
 }
 
-// 値を16進の「ガーブルされた」見た目に変換する（百万長者問題の演出用）。
-// 実際の Garbled Circuit ではなく、入力が秘匿される雰囲気を伝えるための簡易表現。
-export function garble(value: number, salt: number): string {
-  // 値とソルトを混ぜて決定的な擬似ハッシュ文字列にする。
-  let h = (value ^ salt) >>> 0
+// イラスト用の「ガーブルされた風」16進ラベルを生成する（百万長者問題の演出用）。
+// これは本物の Garbled Circuit ではなく、不可読なワイヤラベルの「雰囲気」を見せるだけ。
+// 入力を逆算できないよう、表示しない nonce を毎回混ぜる（画面上の値から元の数を当てられない）。
+export function garbleLabel(nonce: number): string {
+  let h = nonce >>> 0
+  h = (h ^ (h >>> 16)) >>> 0
   h = (h * 2654435761) >>> 0
-  return h.toString(16).padStart(8, '0').slice(0, 8)
-}
-
-// 16進ハッシュ風文字列を seed から生成（マスクなどの「見た目」用）。
-export function hexNoise(seed: number, len = 6): string {
-  let h = (seed * 2246822519) >>> 0
   h = (h ^ (h >>> 13)) >>> 0
-  return h.toString(16).padStart(8, '0').slice(0, len)
+  return h.toString(16).padStart(8, '0').slice(0, 8)
 }

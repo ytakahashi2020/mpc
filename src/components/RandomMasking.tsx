@@ -12,7 +12,7 @@ export default function RandomMasking() {
   const n = values.length
 
   const masks = useMemo(() => {
-    const rng = makeRng(seed * 100019 + values.reduce((a, b) => a * 5 + b, 3))
+    const rng = makeRng()
     return zeroSumMasks(n, rng)
   }, [values, seed, n])
 

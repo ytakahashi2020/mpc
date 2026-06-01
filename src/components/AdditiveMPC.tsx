@@ -12,9 +12,9 @@ export default function AdditiveMPC() {
 
   const n = values.length
 
-  // giver→receiver のシェア行列。実行ボタンで seed を固定して再現性を持たせる。
+  // giver→receiver のシェア行列。実行のたびに暗号学的乱数で引き直す（値には依存しない）。
   const matrix = useMemo(() => {
-    const rng = makeRng(seed * 99991 + values.reduce((a, b) => a * 7 + b, 1))
+    const rng = makeRng()
     return shareMatrix(values, rng)
   }, [values, seed])
 

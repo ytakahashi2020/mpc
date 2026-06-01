@@ -11,9 +11,10 @@ export default function SecretSharing() {
   const [parties, setParties] = useState(3)
   const [seed, setSeed] = useState(7)
 
-  // seed / secret / parties が変わるたびにシェアを決定的に再計算する。
+  // secret / parties / seed が変わるたびにシェアを引き直す。
+  // 乱数は暗号学的乱数を使い、秘密には依存しない（seed は再計算トリガのみ）。
   const shares = useMemo(() => {
-    const rng = makeRng(seed * 100003 + secret * 31 + parties)
+    const rng = makeRng()
     return additiveShares(secret, parties, rng)
   }, [secret, parties, seed])
 
@@ -90,9 +91,15 @@ export default function SecretSharing() {
             <code>(s₁ + s₂ + … + sₙ) mod {FIELD_P} = secret</code>.
           </p>
           <p>
-            The first <code>n−1</code> shares are uniform random in <code>Z_{FIELD_P}</code>; the last
-            one is <code>secret − (s₁ + … + sₙ₋₁) mod {FIELD_P}</code>. Any subset smaller than{' '}
-            <code>n</code> is statistically independent of the secret — it reveals nothing.
+            The first <code>n−1</code> shares are drawn uniformly at random from{' '}
+            <code>Z_{FIELD_P}</code> (this demo uses your browser’s cryptographic RNG); the last one is{' '}
+            <code>secret − (s₁ + … + sₙ₋₁) mod {FIELD_P}</code>. Any subset smaller than <code>n</code>{' '}
+            is statistically independent of the secret — it reveals nothing.
+          </p>
+          <p>
+            This is <strong>additive (n-of-n)</strong> sharing: you need <em>every</em> share. Threshold
+            schemes like <strong>Shamir’s</strong> are more general — any <code>t</code> of <code>n</code>{' '}
+            shares can reconstruct, so losing some is survivable.
           </p>
           <p style={{ fontFamily: 'var(--mono)', color: 'var(--accent-2)' }}>
             {shares.join(' + ')} ≡ {secret} (mod {FIELD_P})
