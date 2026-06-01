@@ -1,0 +1,101 @@
+import { useMemo, useState } from 'react'
+import { useT } from '../i18n'
+import { zeroSumMasks, mod, makeRng, FIELD_P } from '../mpc'
+import { Chip, Detail, partyColor } from './shared'
+
+// 乱数マスキングセクション：合計0のマスクを各値に足して公開し、合計だけ復元する。
+export default function RandomMasking() {
+  const { t } = useT()
+  const [values, setValues] = useState([120, 80, 200, 60])
+  const [seed, setSeed] = useState(11)
+
+  const n = values.length
+
+  const masks = useMemo(() => {
+    const rng = makeRng(seed * 100019 + values.reduce((a, b) => a * 5 + b, 3))
+    return zeroSumMasks(n, rng)
+  }, [values, seed, n])
+
+  const published = values.map((v, i) => mod(v + masks[i]))
+  const maskSum = mod(masks.reduce((a, b) => a + b, 0))
+  const publishedSum = mod(published.reduce((a, b) => a + b, 0))
+  const trueSum = mod(values.reduce((a, b) => a + b, 0))
+
+  const setVal = (i: number, v: number) => setValues((arr) => arr.map((x, j) => (j === i ? v : x)))
+
+  return (
+    <section id="mask">
+      <span className="section-tag">03 · {t('navMask')}</span>
+      <h2>{t('maskHeading')}</h2>
+      <p className="lead">{t('maskIntro')}</p>
+
+      <div className="card">
+        <div className="btn-row">
+          <button className="btn" onClick={() => setSeed((s) => s + 1)}>
+            🎲 {t('maskReshuffle')}
+          </button>
+        </div>
+
+        <div className="party-grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))' }}>
+          {values.map((v, i) => (
+            <div className="party" key={i}>
+              <div className="party-head">
+                <span className="party-dot" style={{ background: partyColor(i) }} />
+                <span className="party-name">P{i + 1}</span>
+              </div>
+              <div className="control" style={{ margin: '6px 0' }}>
+                <label>{t('maskValueLabel', { n: i + 1 })}</label>
+                <input
+                  type="number"
+                  value={v}
+                  min={0}
+                  max={500}
+                  onChange={(e) => setVal(i, mod(Number(e.target.value)))}
+                />
+              </div>
+              <div className="chip-row" style={{ marginTop: 6 }}>
+                <Chip>
+                  <span className="chip-label">{t('maskMask')}</span>
+                  {masks[i]}
+                </Chip>
+              </div>
+              <div className="chip-row" style={{ marginTop: 6 }}>
+                <Chip flash>
+                  <span className="chip-label">{t('maskPublished')}</span>
+                  {published[i]}
+                </Chip>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="result">
+          <div className="small">
+            {t('maskMaskSum')}: <strong>{maskSum}</strong>
+          </div>
+          <div className="big">{published.join(' + ')} = {publishedSum}</div>
+          <div className="small">
+            {t('maskPublishedSum')}: <strong style={{ color: 'var(--accent-2)' }}>{publishedSum}</strong>
+            {' · '}
+            {t('maskTrueSum')}: {trueSum} {publishedSum === trueSum ? '✓' : ''}
+          </div>
+        </div>
+
+        <Detail>
+          <p>
+            Parties agree on masks <code>m₁ … mₙ</code> with <code>Σ mᵢ ≡ 0 (mod {FIELD_P})</code>.
+            Each publishes <code>pᵢ = (vᵢ + mᵢ) mod {FIELD_P}</code>.
+          </p>
+          <p>
+            Then <code>Σ pᵢ = Σ vᵢ + Σ mᵢ = Σ vᵢ</code>. Each <code>pᵢ</code> alone is uniformly random
+            (because <code>mᵢ</code> is), so it hides <code>vᵢ</code> perfectly.
+          </p>
+          <p>
+            In practice the zero-sum masks come from pairwise shared randomness:{' '}
+            <code>mᵢ = Σⱼ (rᵢⱼ − rⱼᵢ)</code>, which sums to zero by construction.
+          </p>
+        </Detail>
+      </div>
+    </section>
+  )
+}
