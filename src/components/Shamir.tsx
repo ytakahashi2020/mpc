@@ -47,16 +47,19 @@ export default function Shamir() {
     })
 
   // --- グラフの座標変換 ---
-  const W = 320
-  const H = 220
-  const padL = 34
-  const padB = 26
-  const xMax = parties + 0.5
-  const ys = points.map((p) => p.y).concat([secret])
-  const yMin = Math.min(0, ...ys) - 2
-  const yMax = Math.max(...ys, secret) + 2
-  const sx = (x: number) => padL + (x / xMax) * (W - padL - 8)
-  const sy = (y: number) => H - padB - ((y - yMin) / (yMax - yMin)) * (H - padB - 10)
+  // x=0（秘密の位置）を必ず内側に見せるため、x の範囲を [-0.6, n+0.4] にする。
+  const W = 340
+  const H = 230
+  const padL = 40
+  const padB = 28
+  const padT = 14
+  const xMin = -0.6
+  const xMax = parties + 0.4
+  const ys = points.map((p) => p.y).concat([secret, 0])
+  const yMin = Math.min(...ys) - 2
+  const yMax = Math.max(...ys) + 2
+  const sx = (x: number) => padL + ((x - xMin) / (xMax - xMin)) * (W - padL - 10)
+  const sy = (y: number) => H - padB - ((y - yMin) / (yMax - yMin)) * (H - padB - padT)
 
   // 選んだ点だけを通る補間曲線（点が十分なら真の曲線に一致、足りなければ歪む）。
   const curvePath = useMemo(() => {
@@ -75,14 +78,16 @@ export default function Shamir() {
       }
       return total
     }
+    // x=0（秘密）まで届くよう xMin から描く。
     let d = ''
-    for (let px = 0; px <= xMax * 20; px++) {
-      const x = px / 20
+    const steps = Math.round((xMax - xMin) * 24)
+    for (let k = 0; k <= steps; k++) {
+      const x = xMin + ((xMax - xMin) * k) / steps
       const y = interp(x)
-      d += `${px === 0 ? 'M' : 'L'}${sx(x).toFixed(1)},${sy(y).toFixed(1)} `
+      d += `${k === 0 ? 'M' : 'L'}${sx(x).toFixed(1)},${sy(y).toFixed(1)} `
     }
     return d
-  }, [sel, points, xMax, yMin, yMax])
+  }, [sel, points, xMin, xMax, yMin, yMax])
 
   return (
     <section id="shamir">
@@ -143,35 +148,61 @@ export default function Shamir() {
             {/* グラフ */}
             <div className="graph-wrap">
               <svg viewBox={`0 0 ${W} ${H}`} className="graph" role="img" aria-label="polynomial">
-                {/* 軸 */}
-                <line x1={padL} y1={H - padB} x2={W - 6} y2={H - padB} className="axis" />
-                <line x1={padL} y1={8} x2={padL} y2={H - padB} className="axis" />
-                {/* 補間曲線 */}
-                {curvePath && <path d={curvePath} className="curve" />}
-                {/* 秘密 = x=0 の切片 */}
-                <circle cx={sx(0)} cy={sy(secret)} r={5} className="secret-dot" />
-                <text x={sx(0) + 8} y={sy(secret) - 6} className="secret-label">
-                  s={secret}
+                {/* x=0 の縦ガイド（秘密が隠れている列） */}
+                <line x1={sx(0)} y1={padT} x2={sx(0)} y2={H - padB} className="secret-guide" />
+                {/* x軸（y=0 の高さ） */}
+                <line x1={padL} y1={sy(0)} x2={W - 6} y2={sy(0)} className="axis" />
+                {/* y軸 */}
+                <line x1={padL} y1={padT} x2={padL} y2={H - padB} className="axis" />
+
+                {/* 軸ラベル */}
+                <text x={W - 6} y={sy(0) + 14} className="axis-name" textAnchor="end">
+                  {t('shamirAxisX')}
                 </text>
+                <text x={padL - 4} y={padT + 2} className="axis-name" textAnchor="end">
+                  {t('shamirAxisY')}
+                </text>
+
+                {/* 補間曲線（選んだ点を通り、x=0 まで伸びる） */}
+                {curvePath && <path d={curvePath} className="curve" />}
+
+                {/* 秘密 = x=0 での高さ。復元できたときだけ「正解」として強調表示。 */}
+                {enough && (
+                  <>
+                    <line
+                      x1={sx(0)}
+                      y1={sy(0)}
+                      x2={sx(0)}
+                      y2={sy(secret)}
+                      className="secret-rise"
+                    />
+                    <circle cx={sx(0)} cy={sy(secret)} r={6} className="secret-dot" />
+                    <text x={sx(0) + 9} y={sy(secret) - 7} className="secret-label">
+                      {t('shamirHere', { s: secret })}
+                    </text>
+                  </>
+                )}
+                {/* x=0 の目盛りラベル */}
+                <text x={sx(0)} y={H - padB + 15} className="axis-label">
+                  0
+                </text>
+
                 {/* 各点（シェア） */}
                 {points.map((p, k) => {
                   const i = k + 1
                   const on = selected.has(i)
                   return (
-                    <g
-                      key={i}
-                      onClick={() => toggle(i)}
-                      style={{ cursor: 'pointer' }}
-                    >
+                    <g key={i} onClick={() => toggle(i)} style={{ cursor: 'pointer' }}>
                       <circle
                         cx={sx(p.x)}
                         cy={sy(p.y)}
                         r={7}
-                        fill={on ? partyColor(k) : 'transparent'}
+                        fill={on ? partyColor(k) : 'var(--bg-soft)'}
                         stroke={partyColor(k)}
                         strokeWidth={2}
+                        opacity={on ? 1 : 0.5}
                       />
-                      <text x={sx(p.x)} y={H - padB + 16} className="axis-label">
+                      <text x={sx(p.x)} y={H - padB + 15} className="axis-label">
                         {i}
                       </text>
                     </g>
@@ -180,6 +211,7 @@ export default function Shamir() {
               </svg>
             </div>
 
+            <p className="graph-caption">{t('shamirGraphCaption')}</p>
             <p className="hint-line">👆 {t('shamirHint')}</p>
 
             {/* 点の一覧（タップで選択） */}

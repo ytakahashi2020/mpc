@@ -107,6 +107,13 @@ export const dict = {
   shamirPartiesLabel: { en: 'Parties n (points handed out)', ja: 'パーティ数 n（配る点の数）' },
   shamirReshuffle: { en: 'New random curve', ja: '曲線を引き直す' },
   shamirHint: { en: 'Tap points to use 🟢 or ignore ⚪ them in the recovery', ja: '点をタップして、復元に使う🟢／使わない⚪ を切り替え' },
+  shamirAxisX: { en: 'party #', ja: 'パーティ番号' },
+  shamirAxisY: { en: 'share value', ja: 'シェアの値' },
+  shamirHere: { en: 'secret = {s}', ja: '秘密 = {s}' },
+  shamirGraphCaption: {
+    en: 'Each colored dot is one party’s share — a point on a hidden curve. The curve’s height at the far left (party 0, the dashed line) is the secret. Select enough points and the curve is pinned down, so its left edge reveals the secret.',
+    ja: '色のついた点は各パーティのシェア＝隠れた曲線の上の1点です。その曲線の「いちばん左（パーティ0、点線の位置）での高さ」が秘密です。点を十分に選ぶと曲線が1本に確定し、左端の高さ＝秘密が現れます。',
+  },
   shamirSelected: { en: '{k} of {t} points selected', ja: '{t} 個中 {k} 個を選択中' },
   shamirRecovered: { en: 'Recovered secret', ja: '復元された秘密' },
   shamirEnough: {
