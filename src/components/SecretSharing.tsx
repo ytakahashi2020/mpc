@@ -8,7 +8,7 @@ import { SectionNav } from './SectionNav'
 // 秘密分散セクション：1つの秘密を N シェアに分割し、合計で復元できることを体験する。
 export default function SecretSharing() {
   const { t } = useT()
-  const [secret, setSecret] = useState(42)
+  const [secret, setSecret] = useState(13)
   const [parties, setParties] = useState(3)
   const [seed, setSeed] = useState(7)
   // 各シェアを「隠す」状態。タイルをタップして単体では何も分からないことを体験させる。
@@ -46,7 +46,7 @@ export default function SecretSharing() {
           <input
             type="range"
             min={0}
-            max={200}
+            max={20}
             value={secret}
             onChange={(e) => setSecret(Number(e.target.value))}
           />

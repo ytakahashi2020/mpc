@@ -7,7 +7,7 @@ import { SectionNav } from './SectionNav'
 // 加算的MPCセクション：3者がシェアを交換して合計だけを得るプロトコルを段階的に見せる。
 export default function AdditiveMPC() {
   const { t } = useT()
-  const [values, setValues] = useState([50, 30, 70])
+  const [values, setValues] = useState([8, 5, 12])
   const [seed, setSeed] = useState(3)
   // step: 0 = 未実行, 1..4 = 各ステップまで表示。段階送りで理解負荷を下げる。
   const [step, setStep] = useState(0)
@@ -44,7 +44,7 @@ export default function AdditiveMPC() {
                 type="number"
                 value={v}
                 min={0}
-                max={500}
+                max={20}
                 onChange={(e) => setVal(i, mod(Number(e.target.value)))}
               />
             </div>

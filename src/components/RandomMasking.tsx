@@ -7,7 +7,7 @@ import { SectionNav } from './SectionNav'
 // 乱数マスキングセクション：合計0のマスクを各値に足して公開し、合計だけ復元する。
 export default function RandomMasking() {
   const { t } = useT()
-  const [values, setValues] = useState([120, 80, 200, 60])
+  const [values, setValues] = useState([9, 4, 15, 7])
   const [seed, setSeed] = useState(11)
 
   const n = values.length
@@ -50,7 +50,7 @@ export default function RandomMasking() {
                   type="number"
                   value={v}
                   min={0}
-                  max={500}
+                  max={20}
                   onChange={(e) => setVal(i, mod(Number(e.target.value)))}
                 />
               </div>
