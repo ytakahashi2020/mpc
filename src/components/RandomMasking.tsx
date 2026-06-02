@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useT } from '../i18n'
 import { zeroSumMasks, mod, makeRng, FIELD_P } from '../mpc'
-import { Chip, Detail, partyColor } from './shared'
+import { Badge, Chip, Detail, partyColor } from './shared'
 import { SectionNav } from './SectionNav'
 
 // 乱数マスキングセクション：合計0のマスクを各値に足して公開し、合計だけ復元する。
@@ -29,6 +29,7 @@ export default function RandomMasking() {
   return (
     <section id="mask">
       <span className="section-tag">03 · {t('navMask')}</span>
+      <Badge kind="mpc" />
       <h2>{t('maskHeading')}</h2>
       <p className="lead">{t('maskIntro')}</p>
 

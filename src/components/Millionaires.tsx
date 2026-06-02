@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useT, type Key } from '../i18n'
 import { signedShares, makeRng } from '../mpc'
-import { Chip, Detail, partyColor } from './shared'
+import { Badge, Chip, Detail, partyColor } from './shared'
 import { SectionNav } from './SectionNav'
 
 // 百万長者問題セクション：金額を明かさずに大小だけを判定する。
@@ -46,6 +46,7 @@ export default function Millionaires() {
   return (
     <section id="millionaire">
       <span className="section-tag">04 · {t('navMillionaire')}</span>
+      <Badge kind="mpc" />
       <h2>{t('mHeading')}</h2>
       <p className="lead">{t('mIntro')}</p>
 

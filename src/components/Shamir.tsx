@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useT } from '../i18n'
 import { makePolynomial, evalPoly, lagrangeAtZero, makeRng } from '../mpc'
-import { Detail, partyColor } from './shared'
+import { Badge, Detail, partyColor } from './shared'
 import { SectionNav } from './SectionNav'
 
 // Shamir のしきい値秘密分散（t-of-n）。多項式と点をグラフで可視化し、
@@ -92,6 +92,7 @@ export default function Shamir() {
   return (
     <section id="shamir">
       <span className="section-tag">01b · {t('navShamir')}</span>
+      <Badge kind="block" />
       <h2>{t('shamirHeading')}</h2>
       <p className="lead">{t('shamirIntro')}</p>
 

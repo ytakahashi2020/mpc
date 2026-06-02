@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useT } from '../i18n'
 import { shareMatrix, localSums, reconstruct, makeRng, mod, FIELD_P } from '../mpc'
-import { Chip, Detail, partyColor } from './shared'
+import { Badge, Chip, Detail, partyColor } from './shared'
 import { SectionNav } from './SectionNav'
 
 // 加算的MPCセクション：3者がシェアを交換して合計だけを得るプロトコルを段階的に見せる。
@@ -43,6 +43,7 @@ export default function AdditiveMPC() {
   return (
     <section id="add">
       <span className="section-tag">02 · {t('navAdd')}</span>
+      <Badge kind="mpc" />
       <h2>{t('addHeading')}</h2>
       <p className="lead">{t('addIntro')}</p>
 

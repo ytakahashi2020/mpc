@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useT } from '../i18n'
 import { additiveShares, reconstruct, FIELD_P } from '../mpc'
 import { makeRng } from '../mpc'
-import { Chip, Detail, partyColor } from './shared'
+import { Badge, Chip, Detail, partyColor } from './shared'
 import { SectionNav } from './SectionNav'
 
 // 秘密分散セクション：1つの秘密を N シェアに分割し、合計で復元できることを体験する。
@@ -37,6 +37,7 @@ export default function SecretSharing() {
   return (
     <section id="shares">
       <span className="section-tag">01 · {t('navShares')}</span>
+      <Badge kind="block" />
       <h2>{t('sharesHeading')}</h2>
       <p className="lead">{t('sharesIntro')}</p>
 

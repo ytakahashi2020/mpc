@@ -74,6 +74,7 @@ function Intro() {
       <span className="section-tag">{t('navIntro')}</span>
       <h2>{t('introHeading')}</h2>
       <p className="lead">{t('introBody')}</p>
+      <p className="note">{t('introMap')}</p>
       <div className="hero-grid">
         {cards.map((c) => (
           <a className="hero-card" href={c.href} key={c.num}>

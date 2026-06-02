@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useT } from '../i18n'
 import { FIELD_P, mod } from '../mpc'
+import { Badge } from './shared'
 import { SectionNav } from './SectionNav'
 
 // 入門者が最初にぶつかる「mod（剰余）」を、時計のたとえで先に体感させるミニデモ。
@@ -22,6 +23,7 @@ export default function ModClock() {
   return (
     <section id="mod">
       <span className="section-tag">00 · {t('modValue')}</span>
+      <Badge kind="foundation" />
       <h2>{t('modHeading')}</h2>
       <p className="lead">{t('modIntro', { p: FIELD_P })}</p>
 

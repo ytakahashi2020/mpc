@@ -26,11 +26,20 @@ export const dict = {
   navMask: { en: 'Random Masking', ja: '乱数マスキング' },
   navMillionaire: { en: "Millionaires' Problem", ja: '百万長者問題' },
 
+  // --- 位置づけバッジ（部品 / MPC本体） ---
+  badgeBuildingBlock: { en: '🧩 Building block — splitting, not computing yet', ja: '🧩 部品 — まだ「分ける」だけ（計算はしない）' },
+  badgeMpc: { en: '⚙️ MPC itself — computing on data kept hidden', ja: '⚙️ MPC本体 — 隠したまま計算する' },
+  badgeFoundation: { en: '🗺️ Foundation — the idea everything builds on', ja: '🗺️ 土台 — すべての出発点になる考え方' },
+
   // --- イントロ ---
   introHeading: { en: 'Compute together, reveal nothing', ja: 'いっしょに計算、でも中身は秘密' },
   introBody: {
     en: 'Several people each hold a private number. They want to learn one result — a sum, an average, a comparison — without ever showing their own number to anyone. MPC makes this possible. Work through the four interactive sections below.',
     ja: '複数の人がそれぞれ秘密の数字を持っています。誰一人として自分の数字を他人に見せることなく、合計・平均・比較といった「1つの答え」だけを知りたい。MPCはそれを可能にします。下の4つの体験セクションを順に進めてみましょう。',
+  },
+  introMap: {
+    en: 'How to read this: the first sections are 🧩 building blocks (ways to split a secret) and 🗺️ foundations. The real MPC — ⚙️ computing on hidden data — starts at “Additive MPC”. Watch the badge under each heading.',
+    ja: 'この順番の読み方：前半は🧩 部品（秘密を分ける方法）と🗺️ 土台です。本当のMPC＝⚙️ 隠したまま計算する話は「加算的MPC」から始まります。各見出しの下のバッジに注目してください。',
   },
   introCardSharesTitle: { en: 'Secret Sharing', ja: '秘密分散' },
   introCardSharesBody: {
