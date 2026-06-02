@@ -88,14 +88,3 @@ export function localSums(matrix: number[][]): number[] {
   }
   return sums
 }
-
-// イラスト用の「ガーブルされた風」16進ラベルを生成する（百万長者問題の演出用）。
-// これは本物の Garbled Circuit ではなく、不可読なワイヤラベルの「雰囲気」を見せるだけ。
-// 入力を逆算できないよう、表示しない nonce を毎回混ぜる（画面上の値から元の数を当てられない）。
-export function garbleLabel(nonce: number): string {
-  let h = nonce >>> 0
-  h = (h ^ (h >>> 16)) >>> 0
-  h = (h * 2654435761) >>> 0
-  h = (h ^ (h >>> 13)) >>> 0
-  return h.toString(16).padStart(8, '0').slice(0, 8)
-}

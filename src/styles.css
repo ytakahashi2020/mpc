@@ -512,6 +512,15 @@ code {
   font-family: var(--mono);
 }
 
+/* ---------- Guess box (millionaires quiz) ---------- */
+.guess-box {
+  margin: 14px 0 4px;
+  padding: 12px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--bg-soft);
+}
+
 /* ---------- Hint line ---------- */
 .hint-line {
   font-size: 13px;

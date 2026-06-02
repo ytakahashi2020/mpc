@@ -149,25 +149,60 @@ export const dict = {
   // --- 百万長者問題 ---
   mHeading: { en: "The Millionaires' Problem", ja: '百万長者問題' },
   mIntro: {
-    en: 'Two millionaires want to know who is richer without revealing how much they have. Set each fortune below and run the protocol. The only thing revealed is the answer to “who is richer?” — never the amounts.',
-    ja: '2人の百万長者が、自分の財産額を明かさずに「どちらがお金持ちか」だけを知りたい。下で各自の財産を設定し、プロトコルを実行してください。明かされるのは「どちらが上か」という答えだけで、金額そのものは決して出てきません。',
-  },
-  mDisclaimer: {
-    en: 'Note: unlike the other sections, the comparison here is a simplified local simulation — the hex labels are an illustration of garbled wires, not a real protocol transcript.',
-    ja: '注：このセクションだけは比較をローカルで行う簡略シミュレーションです。16進ラベルはガーブルされたワイヤの「イメージ図」で、実際の通信内容ではありません。',
+    en: 'Two millionaires want to know who is richer — without telling each other how much they have. The trick: instead of comparing the amounts, they jointly compute the difference d = Alice − Bob using the shares you just learned, and reveal only its sign. A positive sign means Alice is richer; the actual numbers never appear.',
+    ja: '2人の百万長者が、互いに金額を教えずに「どちらがお金持ちか」だけを知りたい。コツは、金額を比べる代わりに、さっき学んだシェアの仕組みで「差 d ＝ アリス − ボブ」をいっしょに計算し、その符号（プラスかマイナスか）だけを公開すること。プラスならアリスが上。実際の金額は一度も現れません。',
   },
   mAliceLabel: { en: "Alice's fortune", ja: 'アリスの財産' },
   mBobLabel: { en: "Bob's fortune", ja: 'ボブの財産' },
-  mRun: { en: 'Find out who is richer', ja: 'どちらが上か判定' },
+  mGuessPrompt: {
+    en: 'Before running: who do you think is richer?',
+    ja: '実行する前に予想：どちらが上だと思う？',
+  },
+  mGuessAlice: { en: 'Alice', ja: 'アリス' },
+  mGuessBob: { en: 'Bob', ja: 'ボブ' },
+  mGuessEqual: { en: 'Tie', ja: '同じ' },
+  mGuessRight: { en: '✓ Your guess was right!', ja: '✓ 予想は当たり！' },
+  mGuessWrong: { en: 'Your guess was different — see why below.', ja: '予想とは違いました。理由を下で確認。' },
+  mRun: { en: 'Run the protocol', ja: 'プロトコルを実行' },
+  mNext: { en: 'Next step →', ja: '次のステップ →' },
+  mReset: { en: 'Start over', ja: '最初から' },
+  mStepCounter: { en: 'Step {c} of 3', ja: 'ステップ {c} / 3' },
+
+  // Step 1: それぞれが自分の値をシェアに分割
+  mStep1: { en: '1. Each splits their fortune into two shares', ja: '1. 各自が財産を2つのシェアに分割' },
+  mStep1Body: {
+    en: 'Just like before. Alice keeps one share and gives one to Bob; Bob does the same. Neither share alone tells you anything.',
+    ja: '前と同じです。アリスはシェアを1つ自分で持ち、1つをボブに渡します。ボブも同様。どちらのシェア単体からも何も分かりません。',
+  },
+  mShareKeeps: { en: 'P{n} keeps', ja: 'P{n}が保持' },
+  mShareGives: { en: 'gives away', ja: '相手に渡す' },
+
+  // Step 2: 差 d = Alice − Bob のシェアを各自が手元で作る
+  mStep2: { en: '2. Each computes a share of the difference d = Alice − Bob', ja: '2. 各自が差 d = アリス − ボブ のシェアを手元で計算' },
+  mStep2Body: {
+    en: 'Each party subtracts locally on the shares it holds. Because subtraction works share-by-share, the two results are shares of d — the difference — even though nobody knows d yet.',
+    ja: '各自が手元のシェアどうしで引き算します。引き算はシェアごとに成り立つので、2つの結果は「差 d のシェア」になります。まだ誰も d の値は知りません。',
+  },
+  mDiffShare: { en: "share of d held by P{n}", ja: 'P{n}が持つ d のシェア' },
+
+  // Step 3: 差のシェアを合わせ、符号だけ公開
+  mStep3: { en: '3. Combine the shares → reveal only the sign of d', ja: '3. シェアを合わせる → d の符号だけ公開' },
+  mStep3Body: {
+    en: 'The two shares are combined to recover d. But d on its own does not reveal either fortune — only whether it is positive, negative, or zero. That single bit answers “who is richer?”',
+    ja: '2つのシェアを合わせて d を復元します。でも d だけでは、どちらの財産も分かりません。分かるのは「プラス・マイナス・ゼロ」だけ。この1ビットが「どちらが上か」の答えです。',
+  },
+  mSignLabel: { en: 'Sign of d (the only thing revealed)', ja: 'd の符号（公開されるのはこれだけ）' },
+  mSignPos: { en: 'd > 0', ja: 'd > 0' },
+  mSignNeg: { en: 'd < 0', ja: 'd < 0' },
+  mSignZero: { en: 'd = 0', ja: 'd = 0' },
+
   mResultAlice: { en: 'Alice is richer.', ja: 'アリスの方が上。' },
   mResultBob: { en: 'Bob is richer.', ja: 'ボブの方が上。' },
   mResultEqual: { en: 'They are equally rich.', ja: '2人は同額でした。' },
-  mResultHidden: { en: 'The amounts were never revealed — only the answer.', ja: '金額は一度も明かされず、答えだけが分かりました。' },
-  mBarsNote: {
-    en: 'Only relative length is shown — the exact amounts stay hidden.',
-    ja: '見せるのは相対的な長さだけ。正確な金額は隠したままです。',
+  mResultHidden: {
+    en: 'The amounts were never combined or shown — only the sign of their difference.',
+    ja: '金額は合算も表示もされませんでした。出たのは差の符号だけです。',
   },
-  mGarbled: { en: 'Illustrative opaque labels (not a real transcript)', ja: 'イメージ図：不可読なラベル（実通信ではありません）' },
 
   // --- 詳細トグル ---
   showDetail: { en: 'Show the math', ja: '数式を見る' },
@@ -217,16 +252,16 @@ export const dict = {
 
   // --- 数式パネル（百万長者問題） ---
   mMath1: {
-    en: 'Yao’s original 1982 problem: two parties with private inputs a and b learn only the bit a ≥ b.',
-    ja: 'Yao の 1982 年の元問題：秘密の入力 a, b を持つ2者が、a ≥ b というビットだけを知ります。',
+    en: 'This demo reuses additive sharing. Subtraction is linear, so a share of d = a − b is just (share of a) − (share of b), computed locally. Combining the two shares gives d; its sign answers a ≥ b without exposing a or b.',
+    ja: 'このデモは加算的秘密分散を再利用します。引き算は線形なので、差 d = a − b のシェアは「a のシェア − b のシェア」を手元で計算するだけ。2つのシェアを合わせると d が出て、その符号が a ≥ b の答えになります。a や b は出てきません。',
   },
   mMath2: {
-    en: 'In a garbled circuit, one party encrypts (“garbles”) a boolean comparison circuit so every wire carries a random-looking label instead of a real 0/1. The other party evaluates it via oblivious transfer, learning only the output label — never the inputs. The strings above stand in for those opaque wire labels; they are decorative, not a real protocol transcript.',
-    ja: 'ガーブル回路では、一方が真偽の比較回路を暗号化（「ガーブル」）し、各ワイヤが本物の 0/1 ではなく乱数に見えるラベルを持つようにします。もう一方は紛失通信（oblivious transfer）で評価し、出力ラベルだけを知り、入力は決して知りません。上の文字列はそうした不可読なワイヤラベルの代わりで、装飾であり実際の通信記録ではありません。',
+    en: 'Yao’s original 1982 formulation uses a garbled circuit instead: one party encrypts a comparison circuit so each wire carries a random-looking label, and the other evaluates it via oblivious transfer, learning only the output bit. Same goal, different machinery.',
+    ja: 'Yao の 1982 年の元の定式化では、代わりにガーブル回路を使います。一方が比較回路を暗号化して各ワイヤを乱数に見えるラベルにし、もう一方が紛失通信（OT）で評価して出力ビットだけを知ります。目的は同じで、仕組みが違います。',
   },
   mMath3: {
-    en: 'Honesty note: unlike the previous three sections (which run real Z_{p} arithmetic), this section computes the comparison locally as a simplified simulation. Only the final “who is richer” bit is meant to be revealed; the amounts are never displayed.',
-    ja: '正直な注記：実際の Z_{p} 演算を行う前の3セクションと違い、このセクションは比較をローカルで行う簡略シミュレーションです。明かされるのは「どちらが上か」の最終ビットだけで、金額は一切表示されません。',
+    en: 'Honesty note: revealing the exact value of d leaks a little more than the bare “who is richer” bit (e.g. the gap size). Production protocols compare without revealing d itself; here we show d’s sign to keep the idea visible.',
+    ja: '正直な注記：d の正確な値を見せると、「どちらが上か」の1ビットより少しだけ多く（差の大きさなど）漏れます。実運用では d 自体を見せずに比較します。本デモは仕組みを見せるため d の符号まで表示しています。',
   },
 
   // --- セクション間ナビ ---
