@@ -133,7 +133,7 @@ export const dict = {
   modNoWrap: { en: '{a} is below {p}, so it stays {a}.', ja: '{a} は {p} 未満なので、そのまま {a} です。' },
 
   // --- Shamir しきい値秘密分散セクション ---
-  shamirHeading: { en: 'Threshold sharing: any t of n', ja: 'しきい値秘密分散：n個のうち任意のt個' },
+  shamirHeading: { en: 'Shamir Secret Sharing (SSS): any t of n', ja: 'Shamir秘密分散（SSS）：n個のうち任意のt個' },
   shamirIntro: {
     en: 'The previous section needed every share. But often you want “any 3 of 5 can recover” — survive lost shares, yet stay safe if a few leak. Shamir’s scheme does this with a curve: hide the secret as the height of a polynomial at x = 0, and hand each party one point on the curve. Any t points pin down a degree-(t−1) curve exactly, so they recover the secret. With fewer than t points, infinitely many curves fit — the secret stays hidden.',
     ja: '前のセクションは全シェアが必要でした。でも実際には「5個のうち任意の3個で復元」したいことが多い — シェアを失っても耐え、少し漏れても安全、というように。Shamir の方式はこれを「曲線」で実現します。秘密を多項式の x=0 での高さに隠し、各パーティに曲線上の点を1つ渡します。t 個の点があれば (t−1) 次の曲線がぴったり1本に決まり、秘密が復元できます。t 個未満だと無数の曲線が当てはまり、秘密は隠れたままです。',
@@ -309,8 +309,8 @@ export const dict = {
     ja: '最初の n−1 個のシェアは Z_{p} から一様ランダムに選びます（本デモはブラウザの暗号学的乱数を使用）。最後の1個は 秘密 − (s₁ + … + sₙ₋₁) mod {p} です。n 個に満たないどの部分集合も秘密と統計的に独立で、何も明かしません。',
   },
   sharesMath3: {
-    en: 'This is additive (n-of-n) sharing: you need every share. Threshold schemes like Shamir’s are more general — any t of n shares can reconstruct, so losing some is survivable.',
-    ja: 'これは加算的（n-of-n）秘密分散で、すべてのシェアが必要です。Shamir のような閾値方式はより一般的で、n 個のうち任意の t 個で復元できるため、いくつか失っても耐えられます。',
+    en: 'This is additive (n-of-n) sharing: you need every share. Threshold schemes like Shamir Secret Sharing (SSS) are more general — any t of n shares can reconstruct, so losing some is survivable.',
+    ja: 'これは加算的（n-of-n）秘密分散で、すべてのシェアが必要です。Shamir秘密分散（SSS）のような閾値方式はより一般的で、n 個のうち任意の t 個で復元できるため、いくつか失っても耐えられます。',
   },
 
   // --- 数式パネル（加算的MPC） ---
@@ -353,6 +353,28 @@ export const dict = {
   mMath3: {
     en: 'Honesty note: revealing the exact value of d leaks a little more than the bare “who is richer” bit (e.g. the gap size). Production protocols compare without revealing d itself, and over a finite field comparison is genuinely tricky (a wrapped value like p−1 means −1). We use plain signed integers here so the sign is obvious.',
     ja: '正直な注記：d の正確な値を見せると、「どちらが上か」の1ビットより少しだけ多く（差の大きさなど）漏れます。実運用では d 自体を見せずに比較します。また有限体の上では比較は本当に厄介で（一周した値 p−1 は −1 を意味する）、本デモはそこを避けて符号が一目で分かる普通の整数を使っています。',
+  },
+
+  // --- 実世界での使い分け（ブロックチェーン鍵） ---
+  navReal: { en: 'In the real world', ja: '実世界では' },
+  realHeading: { en: 'Where is this actually used? Blockchain keys', ja: '実際どこで使われる？ ブロックチェーンの鍵' },
+  realIntro: {
+    en: 'A common question: for a blockchain private key, is it Shamir secret sharing or additive MPC? Both — but for different jobs.',
+    ja: 'よくある疑問：ブロックチェーンの秘密鍵には、Shamir秘密分散が使われるの？ それとも加算的MPC？ 答えは「両方。ただし目的が違う」です。',
+  },
+  realCard1Title: { en: '🗄️ Storing / recovering a key', ja: '🗄️ 鍵の保管・復旧' },
+  realCard1Body: {
+    en: 'Shamir Secret Sharing (SSS) — e.g. SLIP-0039 “Shamir Backup” in hardware wallets. Split a key into shares (say 2-of-3); the key is reconstructed when you need to use it. Simple and robust, but at signing time the full key briefly exists in one place.',
+    ja: 'Shamir秘密分散（SSS）— 例：ハードウェアウォレットの SLIP-0039「Shamir Backup」。鍵を複数シェアに分割し（例 2-of-3）、使うときに鍵を再構成します。単純で頑丈ですが、署名の瞬間は完全な鍵が一瞬1か所に揃います。',
+  },
+  realCard2Title: { en: '🔏 Signing without rebuilding the key', ja: '🔏 鍵を組み立てずに署名' },
+  realCard2Body: {
+    en: 'Threshold signatures (TSS), built on MPC — the additive-sharing and masking ideas from this demo. Parties jointly produce one signature while the full key never exists anywhere. Used by custody/wallet platforms (Fireblocks, Coinbase, ZenGo, …).',
+    ja: 'しきい値署名（TSS）— このデモの加算的シェアやマスキングの考え方を土台にしたMPC。完全な鍵をどこにも作らないまま、複数当事者で1つの署名を生成します。カストディ／ウォレット基盤（Fireblocks、Coinbase、ZenGo など）で利用。',
+  },
+  realVerdict: {
+    en: 'So: project by project — yes. But the 2020s trend in institutional custody and modern wallets leans toward MPC signatures (TSS), while Shamir (SSS) stays popular for personal backup. (On-chain multisig like Gnosis Safe is a third, separate approach: enforced by the contract, not by cryptographically splitting one key.)',
+    ja: 'つまり「プロジェクトによってそれぞれ」は YES。ただし2020年代の機関カストディや最新ウォレットは MPC署名（TSS）へ寄る流れで、Shamir（SSS）は「個人のバックアップ」用途で根強く残っています。（Gnosis Safe のようなオンチェーンのマルチシグは第3の別物で、1つの鍵を暗号的に分割するのではなく、コントラクト側で「n人中m人の署名が必要」を強制します。）',
   },
 
   // --- セクション間ナビ ---

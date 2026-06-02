@@ -9,6 +9,7 @@ export const SECTIONS: Array<{ id: string; navKey: Key }> = [
   { id: 'add', navKey: 'navAdd' },
   { id: 'mask', navKey: 'navMask' },
   { id: 'millionaire', navKey: 'navMillionaire' },
+  { id: 'real', navKey: 'navReal' },
 ]
 
 // 各セクション末尾の「次へ」リンク。学習の流れを前へ前へと押し出す。

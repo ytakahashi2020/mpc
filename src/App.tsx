@@ -6,6 +6,7 @@ import Shamir from './components/Shamir'
 import AdditiveMPC from './components/AdditiveMPC'
 import RandomMasking from './components/RandomMasking'
 import Millionaires from './components/Millionaires'
+import RealWorld from './components/RealWorld'
 import { SECTIONS, SectionNav } from './components/SectionNav'
 
 // 言語の初期値：URL の ?lang= を最優先、なければブラウザ設定で日本語を判定する。
@@ -142,6 +143,7 @@ export default function App() {
         <AdditiveMPC />
         <RandomMasking />
         <Millionaires />
+        <RealWorld />
         <Footer />
       </div>
     </LangContext.Provider>
