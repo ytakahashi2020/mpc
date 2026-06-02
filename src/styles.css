@@ -131,6 +131,11 @@ body {
   color: var(--text);
   border-color: var(--accent);
 }
+.nav a.active {
+  color: #0b1020;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+}
 
 /* ---------- Sections ---------- */
 section {
@@ -442,6 +447,128 @@ code {
   }
   .brand p {
     display: none;
+  }
+}
+
+/* ---------- Clock (mod intro) ---------- */
+.clock-wrap {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.clock {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+.clock-face {
+  fill: var(--bg-soft);
+  stroke: var(--border);
+  stroke-width: 2;
+}
+.clock-tick {
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.clock-num {
+  fill: var(--muted);
+  font-size: 7px;
+  font-family: var(--mono);
+  transition: fill 0.2s;
+}
+.clock-num.active {
+  fill: var(--accent-2);
+  font-weight: 800;
+}
+.clock-hand {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.clock-pin {
+  fill: var(--accent);
+}
+.clock-side {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ---------- Hint line ---------- */
+.hint-line {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0 10px;
+}
+
+/* ---------- Clickable party (hide share) ---------- */
+.party-toggle {
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, opacity 0.15s, transform 0.1s;
+}
+.party-toggle:hover {
+  border-color: var(--accent);
+}
+.party-toggle:active {
+  transform: scale(0.98);
+}
+.party-toggle.is-hidden {
+  opacity: 0.6;
+  border-style: dashed;
+}
+.party-eye {
+  margin-left: auto;
+  font-size: 15px;
+}
+.result-locked {
+  background: linear-gradient(135deg, rgba(255, 122, 144, 0.14), rgba(255, 184, 107, 0.14));
+}
+
+/* ---------- Step counter ---------- */
+.step-counter {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+/* ---------- Section "next" link ---------- */
+.section-next {
+  margin-top: 22px;
+  text-align: right;
+}
+.section-next a {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  transition: all 0.15s;
+}
+.section-next a:hover {
+  border-color: var(--accent);
+  background: var(--bg-soft);
+  transform: translateX(3px);
+}
+
+/* shake for reshuffle feedback */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
   }
 }
 

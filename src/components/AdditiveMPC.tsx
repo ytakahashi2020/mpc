@@ -2,13 +2,15 @@ import { useMemo, useState } from 'react'
 import { useT } from '../i18n'
 import { shareMatrix, localSums, reconstruct, makeRng, mod, FIELD_P } from '../mpc'
 import { Chip, Detail, partyColor } from './shared'
+import { SectionNav } from './SectionNav'
 
 // 加算的MPCセクション：3者がシェアを交換して合計だけを得るプロトコルを段階的に見せる。
 export default function AdditiveMPC() {
   const { t } = useT()
   const [values, setValues] = useState([50, 30, 70])
   const [seed, setSeed] = useState(3)
-  const [ran, setRan] = useState(false)
+  // step: 0 = 未実行, 1..4 = 各ステップまで表示。段階送りで理解負荷を下げる。
+  const [step, setStep] = useState(0)
 
   const n = values.length
 
@@ -24,6 +26,7 @@ export default function AdditiveMPC() {
 
   const setVal = (i: number, v: number) => {
     setValues((arr) => arr.map((x, j) => (j === i ? v : x)))
+    setStep(0) // 入力を変えたらやり直し
   }
 
   return (
@@ -49,22 +52,59 @@ export default function AdditiveMPC() {
         </div>
 
         <div className="btn-row">
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              setSeed((s) => s + 1)
-              setRan(true)
-            }}
-          >
-            ▶ {t('addReveal')}
-          </button>
+          {step === 0 ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setSeed((s) => s + 1)
+                setStep(1)
+              }}
+            >
+              ▶ {t('addReveal')}
+            </button>
+          ) : (
+            <>
+              {step < 4 && (
+                <button className="btn btn-primary" onClick={() => setStep((s) => s + 1)}>
+                  {t('addNext')}
+                </button>
+              )}
+              <button className="btn" onClick={() => setStep(0)}>
+                ↺ {t('addReset')}
+              </button>
+              <span className="step-counter">{t('addStepCounter', { c: step })}</span>
+            </>
+          )}
         </div>
 
-        {ran && (
+        {step >= 1 && (
           <div className="steps pop">
-            {/* Step 2: 交換行列 */}
+            {/* Step 1: 各パーティが値をシェアに分割（秘密分散セクションの再掲＝つながり） */}
             <div>
+              <div className="step-label">{t('addStep1')}</div>
+              <p className="hint-line">{t('addStep1Body')}</p>
+              <div className="party-grid" style={{ gridTemplateColumns: `repeat(${n}, 1fr)` }}>
+                {matrix.map((row, giver) => (
+                  <div className="party" key={giver}>
+                    <div className="party-head">
+                      <span className="party-dot" style={{ background: partyColor(giver) }} />
+                      <span className="party-name">{t('addRowSplits', { n: giver + 1, v: values[giver] })}</span>
+                    </div>
+                    <div className="chip-row">
+                      {row.map((cell, j) => (
+                        <Chip key={j}>{cell}</Chip>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 2: 交換行列 */}
+            {step >= 2 && (
+            <div className="pop">
               <div className="step-label">{t('addStep2')}</div>
+              <p className="hint-line">{t('addRowGiver')} · {t('addColReceiver')}</p>
               <table className="matrix">
                 <thead>
                   <tr>
@@ -98,9 +138,11 @@ export default function AdditiveMPC() {
                 </tbody>
               </table>
             </div>
+            )}
 
             {/* Step 3: 各自のローカル和 */}
-            <div>
+            {step >= 3 && (
+            <div className="pop">
               <div className="step-label">{t('addStep3')}</div>
               <div className="party-grid" style={{ gridTemplateColumns: `repeat(${n}, 1fr)` }}>
                 {sums.map((s, i) => (
@@ -124,9 +166,11 @@ export default function AdditiveMPC() {
                 ))}
               </div>
             </div>
+            )}
 
             {/* Step 4: 全体合計 */}
-            <div className="result">
+            {step >= 4 && (
+            <div className="result pop">
               <div className="small">{t('addStep4')}</div>
               <div className="big">
                 {sums.join(' + ')} = {grand}
@@ -137,6 +181,7 @@ export default function AdditiveMPC() {
                 {t('addCheck')}: {plain} {grand === plain ? '✓' : ''}
               </div>
             </div>
+            )}
           </div>
         )}
 
@@ -156,6 +201,7 @@ export default function AdditiveMPC() {
           </p>
         </Detail>
       </div>
+      <SectionNav id="add" />
     </section>
   )
 }

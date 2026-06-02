@@ -19,6 +19,7 @@ export const dict = {
 
   // --- ナビ（セクション名） ---
   navIntro: { en: 'What is MPC?', ja: 'MPCとは？' },
+  navMod: { en: 'Clock math', ja: '時計の足し算' },
   navShares: { en: 'Secret Sharing', ja: '秘密分散' },
   navAdd: { en: 'Additive MPC', ja: '加算的MPC' },
   navMask: { en: 'Random Masking', ja: '乱数マスキング' },
@@ -66,9 +67,29 @@ export const dict = {
   sharesSumLabel: { en: 'Sum of all shares (mod {p})', ja: '全シェアの合計（mod {p}）' },
   sharesRecovered: { en: 'Recovered secret', ja: '復元された秘密' },
   sharesNote: {
-    en: 'Tip: hide any one share and the secret is unrecoverable. Each share on its own reveals nothing.',
-    ja: 'ヒント：どれか1つでもシェアを隠すと秘密は復元できません。シェア単体からは何も分かりません。',
+    en: 'Tip: hide any one share (👁 → 🙈) and the secret can no longer be rebuilt. Each share on its own reveals nothing.',
+    ja: 'ヒント：どれか1つでもシェアを隠す（👁 → 🙈）と、もう秘密は組み立て直せません。シェア単体からは何も分かりません。',
   },
+  sharesHideHint: { en: 'Tap a tile to hide / show its share', ja: 'タイルをタップしてシェアを隠す／表示' },
+  sharesHidden: { en: 'hidden', ja: '非表示' },
+  sharesCannotRecover: {
+    en: 'Cannot recover — a share is hidden',
+    ja: '復元できません — シェアが隠れています',
+  },
+
+  // --- mod の導入（時計のたとえ） ---
+  modHeading: { en: 'First, a quick idea: clock arithmetic', ja: 'はじめに：時計の足し算' },
+  modIntro: {
+    en: 'MPC adds numbers on a clock that wraps around at {p}. Go past {p} and you loop back to 0 — just like 13:00 on a 12-hour clock is 1:00. This “wrap-around” (called mod {p}) is what lets each share look like pure random noise. Drag below to feel it.',
+    ja: 'MPCの足し算は、{p}でひとまわりする時計の上で行います。{p}を超えると0に戻ります — 12時間時計で13時が1時になるのと同じです。この「ひとまわり」（mod {p} と呼びます）のおかげで、各シェアはただの乱数のように見えます。下を動かして体感してみましょう。',
+  },
+  modValue: { en: 'Value', ja: '値' },
+  modResult: { en: '{a} mod {p} =', ja: '{a} mod {p} =' },
+  modWrapNote: {
+    en: '{a} wraps around {w} time(s) past {p}, landing on {r}.',
+    ja: '{a} は {p} を {w} 周して、{r} に着きます。',
+  },
+  modNoWrap: { en: '{a} is below {p}, so it stays {a}.', ja: '{a} は {p} 未満なので、そのまま {a} です。' },
 
   // --- 加算的MPCセクション ---
   addHeading: { en: 'Additive MPC: a private sum', ja: '加算的MPC：秘密の合計' },
@@ -86,6 +107,16 @@ export const dict = {
   addCheck: { en: 'Plain sum for comparison', ja: '確認用の単純な合計' },
   addLocalSum: { en: 'Local sum', ja: '手元の合計' },
   addFrom: { en: 'from P{n}', ja: 'P{n}より' },
+  addNext: { en: 'Next step →', ja: '次のステップ →' },
+  addReset: { en: 'Start over', ja: '最初から' },
+  addStep1Body: {
+    en: 'Just like section 1 — but now every party does it at once. Each party’s row splits its value into shares that sum back to that value.',
+    ja: 'セクション1と同じことを、今度は全員が同時に行います。各パーティの行は、自分の値を「足すと元に戻るシェア」へ分割したものです。',
+  },
+  addRowSplits: { en: 'P{n} splits {v} →', ja: 'P{n} は {v} を分割 →' },
+  addStepCounter: { en: 'Step {c} of 4', ja: 'ステップ {c} / 4' },
+  addColReceiver: { en: 'column = who receives the share', ja: '列＝そのシェアを受け取る人' },
+  addRowGiver: { en: 'row = who sends the share', ja: '行＝そのシェアを渡す人' },
 
   // --- 乱数マスキングセクション ---
   maskHeading: { en: 'Random Masking', ja: '乱数マスキング' },
@@ -127,6 +158,9 @@ export const dict = {
   // --- 詳細トグル ---
   showDetail: { en: 'Show the math', ja: '数式を見る' },
   hideDetail: { en: 'Hide the math', ja: '数式を隠す' },
+
+  // --- セクション間ナビ ---
+  nextSection: { en: 'Next: {name} →', ja: '次へ：{name} →' },
 
   // --- フッター ---
   footerNote: {
