@@ -65,6 +65,10 @@ export const dict = {
   sharesPartyN: { en: 'Party {n}', ja: 'パーティ{n}' },
   sharesShareLabel: { en: 'share', ja: 'シェア' },
   sharesSumLabel: { en: 'Sum of all shares (mod {p})', ja: '全シェアの合計（mod {p}）' },
+  sharesPlainSum: {
+    en: 'Plain sum: {raw} → {raw} mod {p} = {m}',
+    ja: '単純な合計：{raw} → {raw} mod {p} = {m}',
+  },
   sharesRecovered: { en: 'Recovered secret', ja: '復元された秘密' },
   sharesNote: {
     en: 'Tip: hide any one share (👁 → 🙈) and the secret can no longer be rebuilt. Each share on its own reveals nothing.',
@@ -117,6 +121,16 @@ export const dict = {
   addStepCounter: { en: 'Step {c} of 4', ja: 'ステップ {c} / 4' },
   addColReceiver: { en: 'column = who receives the share', ja: '列＝そのシェアを受け取る人' },
   addRowGiver: { en: 'row = who sends the share', ja: '行＝そのシェアを渡す人' },
+  addInputTotal: { en: 'Total to compute', ja: '求めたい合計' },
+  addRawSum: { en: 'plain sum', ja: '単純な合計' },
+  addModSum: { en: 'mod {p}', ja: 'mod {p}' },
+  addSplitCheck: {
+    en: 'shares add to {raw}, and {raw} mod {p} = {m} (back to the value)',
+    ja: 'シェアの合計は {raw}、{raw} mod {p} = {m}（元の値に戻る）',
+  },
+  addLocalRaw: { en: 'received add to {raw}', ja: '受け取り分の単純な合計 {raw}' },
+  addLocalMod: { en: '{raw} mod {p} = {m}', ja: '{raw} mod {p} = {m}' },
+  addGrandRaw: { en: 'Plain sum of local sums', ja: '手元の合計の単純な総和' },
 
   // --- 乱数マスキングセクション ---
   maskHeading: { en: 'Random Masking', ja: '乱数マスキング' },

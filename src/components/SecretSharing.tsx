@@ -24,6 +24,8 @@ export default function SecretSharing() {
   const anyHidden = [...hidden].some((i) => i < parties)
   // 全シェアが見えているときだけ復元できる（加算的 n-of-n の本質）。
   const sum = reconstruct(shares)
+  // mod する前の素朴な合計。mod 後（= 秘密）と並べて見せる。
+  const rawSum = shares.reduce((a, b) => a + b, 0)
 
   const toggleHide = (i: number) =>
     setHidden((prev) => {
@@ -108,6 +110,9 @@ export default function SecretSharing() {
             <>
               <div className="small">{t('sharesSumLabel', { p: FIELD_P })}</div>
               <div className="big">{sum}</div>
+              <div className="sub-line">
+                {t('sharesPlainSum', { raw: rawSum, p: FIELD_P, m: sum })}
+              </div>
               <div className="small">
                 {t('sharesRecovered')}: <strong style={{ color: 'var(--accent-2)' }}>{sum}</strong>
                 {sum === secret ? '  ✓' : ''}

@@ -24,6 +24,17 @@ export default function AdditiveMPC() {
   const grand = reconstruct(sums)
   const plain = mod(values.reduce((a, b) => a + b, 0))
 
+  // 入力の合計（mod する前の素朴な値）。最初の状態でゴールとして示す。
+  const inputRaw = values.reduce((a, b) => a + b, 0)
+  // 各 giver の行（分割したシェア）の素朴な合計。mod すると元の値に戻る。
+  const rowRaw = matrix.map((row) => row.reduce((a, b) => a + b, 0))
+  // 各 receiver が受け取ったシェアの素朴な合計（列ごとの和、mod 前）。
+  const colRaw = matrix[0]
+    ? matrix[0].map((_, j) => matrix.reduce((acc, row) => acc + row[j], 0))
+    : []
+  // 手元の合計（mod 後）の素朴な総和。
+  const grandRaw = sums.reduce((a, b) => a + b, 0)
+
   const setVal = (i: number, v: number) => {
     setValues((arr) => arr.map((x, j) => (j === i ? v : x)))
     setStep(0) // 入力を変えたらやり直し
@@ -49,6 +60,11 @@ export default function AdditiveMPC() {
               />
             </div>
           ))}
+        </div>
+
+        {/* 最初の状態でも「求めたい合計」を提示しておく（ゴールの明示） */}
+        <div className="total-line">
+          {t('addInputTotal')}: <strong>{values.join(' + ')} = {inputRaw}</strong>
         </div>
 
         <div className="btn-row">
@@ -94,6 +110,13 @@ export default function AdditiveMPC() {
                       {row.map((cell, j) => (
                         <Chip key={j}>{cell}</Chip>
                       ))}
+                    </div>
+                    <div className="sub-line">
+                      {t('addSplitCheck', {
+                        raw: rowRaw[giver],
+                        p: FIELD_P,
+                        m: mod(rowRaw[giver]),
+                      })}
                     </div>
                   </div>
                 ))}
@@ -159,8 +182,9 @@ export default function AdditiveMPC() {
                         </Chip>
                       ))}
                     </div>
+                    <div className="sub-line">{t('addLocalRaw', { raw: colRaw[i] })}</div>
                     <div style={{ marginTop: 8 }}>
-                      <Chip flash>= {s}</Chip>
+                      <Chip flash>{t('addLocalMod', { raw: colRaw[i], p: FIELD_P, m: s })}</Chip>
                     </div>
                   </div>
                 ))}
@@ -173,7 +197,13 @@ export default function AdditiveMPC() {
             <div className="result pop">
               <div className="small">{t('addStep4')}</div>
               <div className="big">
-                {sums.join(' + ')} = {grand}
+                {sums.join(' + ')} = {grandRaw}
+              </div>
+              <div className="small">
+                {t('addGrandRaw')}: <strong>{grandRaw}</strong>
+                {' → '}
+                {t('addModSum', { p: FIELD_P })} ={' '}
+                <strong style={{ color: 'var(--accent-2)' }}>{grand}</strong>
               </div>
               <div className="small">
                 {t('addGrandTotal')}: <strong style={{ color: 'var(--accent-2)' }}>{grand}</strong>
