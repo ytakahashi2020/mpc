@@ -311,6 +311,16 @@ input[type="number"]:focus {
   background: var(--accent);
   color: #0b1020;
 }
+/* 公開値：はっきり読めるよう、塗りつぶしではなく枠＋明るい文字にする */
+.chip-published {
+  background: rgba(110, 168, 254, 0.16);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-weight: 700;
+}
+.chip-published .chip-label {
+  color: var(--accent);
+}
 .chip-row {
   display: flex;
   flex-wrap: wrap;

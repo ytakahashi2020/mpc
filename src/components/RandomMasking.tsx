@@ -19,7 +19,9 @@ export default function RandomMasking() {
 
   const published = values.map((v, i) => mod(v + masks[i]))
   const maskSum = mod(masks.reduce((a, b) => a + b, 0))
-  const publishedSum = mod(published.reduce((a, b) => a + b, 0))
+  // mod する前の素朴な合計と mod 後を両方見せる。
+  const publishedRaw = published.reduce((a, b) => a + b, 0)
+  const publishedSum = mod(publishedRaw)
   const trueSum = mod(values.reduce((a, b) => a + b, 0))
 
   const setVal = (i: number, v: number) => setValues((arr) => arr.map((x, j) => (j === i ? v : x)))
@@ -61,10 +63,10 @@ export default function RandomMasking() {
                 </Chip>
               </div>
               <div className="chip-row" style={{ marginTop: 6 }}>
-                <Chip flash>
+                <span className="chip chip-published">
                   <span className="chip-label">{t('maskPublished')}</span>
                   {published[i]}
-                </Chip>
+                </span>
               </div>
             </div>
           ))}
@@ -74,13 +76,18 @@ export default function RandomMasking() {
           <div className="small">
             {t('maskMaskSum')}: <strong>{maskSum}</strong>
           </div>
-          <div className="big">{published.join(' + ')} = {publishedSum}</div>
+          <div className="big">{published.join(' + ')} = {publishedRaw}</div>
+          <div className="sub-line">
+            {t('maskPublishedSum')}: {publishedRaw}
+            {publishedRaw !== publishedSum ? ` → mod ${FIELD_P} = ${publishedSum}` : ''}
+          </div>
           <div className="small">
-            {t('maskPublishedSum')}: <strong style={{ color: 'var(--accent-2)' }}>{publishedSum}</strong>
-            {' · '}
-            {t('maskTrueSum')}: {trueSum} {publishedSum === trueSum ? '✓' : ''}
+            {t('maskTrueSum')}: <strong style={{ color: 'var(--accent-2)' }}>{trueSum}</strong>{' '}
+            {publishedSum === trueSum ? '✓' : ''}
           </div>
         </div>
+
+        <p className="note">{t('maskVsAdditive')}</p>
 
         <Detail>
           <p>{t('maskMath1', { p: FIELD_P })}</p>

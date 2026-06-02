@@ -143,8 +143,12 @@ export const dict = {
   maskPublished: { en: 'published (value + mask)', ja: '公開値（値＋マスク）' },
   maskMaskSum: { en: 'Sum of masks (always 0)', ja: 'マスクの合計（常に0）' },
   maskPublishedSum: { en: 'Sum of published values', ja: '公開値の合計' },
-  maskTrueSum: { en: 'True sum', ja: '本当の合計' },
+  maskTrueSum: { en: 'True sum (for comparison)', ja: '本当の合計（確認用）' },
   maskReshuffle: { en: 'New random masks', ja: 'マスクを引き直す' },
+  maskVsAdditive: {
+    en: 'Why this matters: additive MPC (section 2) needed every pair of parties to exchange shares — n×n messages. Masking is lighter: each party publishes just one number, so it scales far better when many parties only need a sum (e.g. private voting, telemetry, or federated learning). The catch is the masks: parties must agree beforehand on noise that cancels to zero.',
+    ja: 'これにどんな意味があるか：加算的MPC（セクション2）は全パーティどうしがシェアを交換する必要があり、通信は n×n 回でした。マスキングはもっと軽く、各自は1つの数を公開するだけ。多人数で「合計だけ」が欲しい場面（秘密投票、端末からの統計収集、連合学習など）でずっとよくスケールします。代わりの手間は「合計が0になるマスクを事前に取り決める」こと。',
+  },
 
   // --- 百万長者問題 ---
   mHeading: { en: "The Millionaires' Problem", ja: '百万長者問題' },
