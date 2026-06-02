@@ -22,14 +22,14 @@ export default function ModClock() {
 
   return (
     <section id="mod">
-      <span className="section-tag">00 · {t('modValue')}</span>
+      <span className="section-tag">00 · {t('navMod')}</span>
       <Badge kind="foundation" />
       <h2>{t('modHeading')}</h2>
-      <p className="lead">{t('modIntro', { p: FIELD_P })}</p>
+      <p className="lead">{t('modIntro', { p: FIELD_P, clock: CLOCK_P })}</p>
 
       <div className="card">
         <div className="clock-wrap">
-          <svg viewBox="-60 -60 120 120" className="clock" role="img" aria-label="clock">
+          <svg viewBox="-60 -60 120 120" className="clock" role="img" aria-label={t('modClockAria')}>
             <circle cx="0" cy="0" r="50" className="clock-face" />
             {ticks.map((i) => {
               const a = (i / CLOCK_P) * 2 * Math.PI - Math.PI / 2

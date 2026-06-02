@@ -27,11 +27,16 @@ export default function SecretSharing() {
   // mod する前の素朴な合計。mod 後（= 秘密）と並べて見せる。
   const rawSum = shares.reduce((a, b) => a + b, 0)
 
-  // 比較用：「素朴な分け方」= ほぼ均等に3分割（各欠片が秘密の大きさを漏らす）。
+  // 比較用：「素朴な分け方」= ほぼ均等に parties 個へ分割（各欠片が秘密の大きさを漏らす）。
+  // 秘密分散の行と同じ個数にして、対比が公平になるようにする。
   const naiveShares = useMemo(() => {
-    const base = Math.floor(secret / 3)
-    return [base, base, secret - 2 * base]
-  }, [secret])
+    const base = Math.floor(secret / parties)
+    const arr = new Array(parties).fill(base)
+    arr[parties - 1] = secret - base * (parties - 1) // 端数を最後に寄せる
+    return arr
+  }, [secret, parties])
+  // 各欠片が約 base なので、1つ見れば「合計 ≈ base × parties」と当たりがつく＝漏れる。
+  const naiveGuessLow = Math.floor(secret / parties) * parties
 
   const toggleHide = (i: number) =>
     setHidden((prev) => {
@@ -145,7 +150,7 @@ export default function SecretSharing() {
             ))}
           </div>
           <div className="sub-line">
-            {t('sharesGuessNaive')} <strong>{Math.floor(secret / 3) * 3}〜{secret}</strong>
+            {t('sharesGuessNaive')} <strong>{naiveGuessLow}〜{secret}</strong>
           </div>
           <div className="compare-verdict bad">{t('sharesNaiveLeak')}</div>
         </div>

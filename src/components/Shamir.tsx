@@ -148,7 +148,7 @@ export default function Shamir() {
           <>
             {/* グラフ */}
             <div className="graph-wrap">
-              <svg viewBox={`0 0 ${W} ${H}`} className="graph" role="img" aria-label="polynomial">
+              <svg viewBox={`0 0 ${W} ${H}`} className="graph" role="img" aria-label={t('shamirGraphAria')}>
                 {/* x=0 の縦ガイド（秘密が隠れている列） */}
                 <line x1={sx(0)} y1={padT} x2={sx(0)} y2={H - padB} className="secret-guide" />
                 {/* x軸（y=0 の高さ） */}

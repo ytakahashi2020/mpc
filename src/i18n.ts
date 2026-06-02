@@ -15,7 +15,6 @@ export const dict = {
     en: 'Compute on data nobody is allowed to see — touch to understand.',
     ja: '誰も中身を見られないデータで計算する — 触って理解する。',
   },
-  langName: { en: 'English', ja: '日本語' },
 
   // --- ナビ（セクション名） ---
   navIntro: { en: 'What is MPC?', ja: 'MPCとは？' },
@@ -61,7 +60,6 @@ export const dict = {
     en: 'Decide who is richer without revealing either fortune.',
     ja: 'どちらの財産も明かさずに、お金持ちはどちらかを判定する。',
   },
-  introStart: { en: 'Start →', ja: '始める →' },
 
   // --- 秘密分散セクション ---
   sharesHeading: { en: 'Secret Sharing', ja: '秘密分散' },
@@ -85,7 +83,6 @@ export const dict = {
     ja: 'ヒント：どれか1つでもシェアを隠す（👁 → 🙈）と、もう秘密は組み立て直せません。これは「n個全部が必要」な加算的秘密分散です。「5個のうち任意の3個」で復元したい場合は、次のセクションへ。',
   },
   sharesHideHint: { en: 'Tap a tile to hide / show its share', ja: 'タイルをタップしてシェアを隠す／表示' },
-  sharesHidden: { en: 'hidden', ja: '非表示' },
   sharesCannotRecover: {
     en: 'Cannot recover — a share is hidden',
     ja: '復元できません — シェアが隠れています',
@@ -121,10 +118,11 @@ export const dict = {
   // --- mod の導入（時計のたとえ） ---
   modHeading: { en: 'First, a quick idea: clock arithmetic', ja: 'はじめに：時計の足し算' },
   modIntro: {
-    en: 'MPC adds numbers on a clock that wraps around at {p}. Go past {p} and you loop back to 0 — just like 13:00 on a 12-hour clock is 1:00. This “wrap-around” (called mod {p}) is what lets each share look like pure random noise. Drag below to feel it.',
-    ja: 'MPCの足し算は、{p}でひとまわりする時計の上で行います。{p}を超えると0に戻ります — 12時間時計で13時が1時になるのと同じです。この「ひとまわり」（mod {p} と呼びます）のおかげで、各シェアはただの乱数のように見えます。下を動かして体感してみましょう。',
+    en: 'MPC adds numbers on a clock that wraps around. On a {clock}-hour clock, {clock} o’clock is back to 0, and 13:00 is 1:00. Going past the top and looping back is called “mod”. Drag below to feel it on this {clock}-clock. (The rest of this demo uses a bigger clock that wraps at {p} — same idea, more room — which is what makes each share look like pure random noise.)',
+    ja: 'MPCの足し算は「ひとまわりする時計」の上で行います。{clock}時間時計では、{clock}時は0時に戻り、13時は1時になります。てっぺんを超えて0に戻ることを「mod（剰余）」と呼びます。下を動かして、この{clock}時計で体感してみましょう。（このデモの他のセクションは {p} でひとまわりする大きな時計を使います — 考え方は同じで、桁に余裕があるだけ。これが各シェアをただの乱数のように見せます。）',
   },
   modValue: { en: 'Value', ja: '値' },
+  modClockAria: { en: 'clock showing value mod 12', ja: '値を mod 12 した時計' },
   modResult: { en: '{a} mod {p} =', ja: '{a} mod {p} =' },
   modWrapNote: {
     en: '{a} wraps around {w} time(s) past {p}, landing on {r}.',
@@ -143,6 +141,7 @@ export const dict = {
   shamirPartiesLabel: { en: 'Parties n (points handed out)', ja: 'パーティ数 n（配る点の数）' },
   shamirReshuffle: { en: 'New random curve', ja: '曲線を引き直す' },
   shamirHint: { en: 'Tap points to use 🟢 or ignore ⚪ them in the recovery', ja: '点をタップして、復元に使う🟢／使わない⚪ を切り替え' },
+  shamirGraphAria: { en: 'graph of the secret-sharing polynomial', ja: '秘密分散の多項式のグラフ' },
   shamirAxisX: { en: 'party #', ja: 'パーティ番号' },
   shamirAxisY: { en: 'share value', ja: 'シェアの値' },
   shamirHere: { en: 'secret = {s}', ja: '秘密 = {s}' },
@@ -151,7 +150,6 @@ export const dict = {
     ja: '色のついた点は各パーティのシェア＝隠れた曲線の上の1点です。その曲線の「いちばん左（パーティ0、点線の位置）での高さ」が秘密です。点を十分に選ぶと曲線が1本に確定し、左端の高さ＝秘密が現れます。',
   },
   shamirSelected: { en: '{k} of {t} points selected', ja: '{t} 個中 {k} 個を選択中' },
-  shamirRecovered: { en: 'Recovered secret', ja: '復元された秘密' },
   shamirEnough: {
     en: 'Enough points (≥ t): the curve is pinned down, secret = {s}.',
     ja: '点が十分（t 個以上）：曲線が1本に確定し、秘密 = {s}。',
@@ -170,7 +168,7 @@ export const dict = {
     ja: '前のセクションの加算的秘密分散は、実は t = n の特別な場合（全員必要）です。Shamir はそれを一般化し、t ≤ n を自由に選べます。実システムで「3-of-5」などと言うのはこのためです。',
   },
   shamirMath1: {
-    en: 'Make a polynomial f(x) = s + a₁x + … + a_{d}x^{d} of degree d = t−1, with the secret s as the constant term. Party i gets the point (i, f(i)).',
+    en: 'Make a polynomial f(x) = s + a₁x + … + a_d·x^d of degree d = t−1, with the secret s as the constant term. Party i gets the point (i, f(i)).',
     ja: '次数 d = t−1 の多項式 f(x) = s + a₁x + … + a_d x^d を作り、定数項に秘密 s を置きます。パーティ i には点 (i, f(i)) を渡します。',
   },
   shamirMath2: {
@@ -209,7 +207,6 @@ export const dict = {
   addColReceiver: { en: 'column = who receives the share', ja: '列＝そのシェアを受け取る人' },
   addRowGiver: { en: 'row = who sends the share', ja: '行＝そのシェアを渡す人' },
   addInputTotal: { en: 'Total to compute', ja: '求めたい合計' },
-  addRawSum: { en: 'plain sum', ja: '単純な合計' },
   addModSum: { en: 'mod {p}', ja: 'mod {p}' },
   addSplitCheck: {
     en: 'shares add to {raw}, and {raw} mod {p} = {m} (back to the value)',
