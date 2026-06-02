@@ -531,6 +531,48 @@ code {
   background: var(--bg-soft);
 }
 
+/* ---------- Polynomial graph (Shamir) ---------- */
+.graph-wrap {
+  margin: 14px 0 6px;
+  display: flex;
+  justify-content: center;
+}
+.graph {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.graph .axis {
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.graph .axis-label {
+  fill: var(--muted);
+  font-size: 9px;
+  font-family: var(--mono);
+  text-anchor: middle;
+}
+.graph .curve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  opacity: 0.85;
+}
+.graph .secret-dot {
+  fill: var(--accent-2);
+  stroke: #0b1020;
+  stroke-width: 1.5;
+}
+.graph .secret-label {
+  fill: var(--accent-2);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
 /* ---------- Hint line ---------- */
 .hint-line {
   font-size: 13px;

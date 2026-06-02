@@ -21,6 +21,7 @@ export const dict = {
   navIntro: { en: 'What is MPC?', ja: 'MPCとは？' },
   navMod: { en: 'Clock math', ja: '時計の足し算' },
   navShares: { en: 'Secret Sharing', ja: '秘密分散' },
+  navShamir: { en: 'Threshold (t-of-n)', ja: 'しきい値 (t-of-n)' },
   navAdd: { en: 'Additive MPC', ja: '加算的MPC' },
   navMask: { en: 'Random Masking', ja: '乱数マスキング' },
   navMillionaire: { en: "Millionaires' Problem", ja: '百万長者問題' },
@@ -71,8 +72,8 @@ export const dict = {
   },
   sharesRecovered: { en: 'Recovered secret', ja: '復元された秘密' },
   sharesNote: {
-    en: 'Tip: hide any one share (👁 → 🙈) and the secret can no longer be rebuilt. Each share on its own reveals nothing.',
-    ja: 'ヒント：どれか1つでもシェアを隠す（👁 → 🙈）と、もう秘密は組み立て直せません。シェア単体からは何も分かりません。',
+    en: 'Tip: hide any one share (👁 → 🙈) and the secret can no longer be rebuilt. This is additive sharing, where all n shares are required. Want “any 3 of 5”? That is the next section.',
+    ja: 'ヒント：どれか1つでもシェアを隠す（👁 → 🙈）と、もう秘密は組み立て直せません。これは「n個全部が必要」な加算的秘密分散です。「5個のうち任意の3個」で復元したい場合は、次のセクションへ。',
   },
   sharesHideHint: { en: 'Tap a tile to hide / show its share', ja: 'タイルをタップしてシェアを隠す／表示' },
   sharesHidden: { en: 'hidden', ja: '非表示' },
@@ -94,6 +95,49 @@ export const dict = {
     ja: '{a} は {p} を {w} 周して、{r} に着きます。',
   },
   modNoWrap: { en: '{a} is below {p}, so it stays {a}.', ja: '{a} は {p} 未満なので、そのまま {a} です。' },
+
+  // --- Shamir しきい値秘密分散セクション ---
+  shamirHeading: { en: 'Threshold sharing: any t of n', ja: 'しきい値秘密分散：n個のうち任意のt個' },
+  shamirIntro: {
+    en: 'The previous section needed every share. But often you want “any 3 of 5 can recover” — survive lost shares, yet stay safe if a few leak. Shamir’s scheme does this with a curve: hide the secret as the height of a polynomial at x = 0, and hand each party one point on the curve. Any t points pin down a degree-(t−1) curve exactly, so they recover the secret. With fewer than t points, infinitely many curves fit — the secret stays hidden.',
+    ja: '前のセクションは全シェアが必要でした。でも実際には「5個のうち任意の3個で復元」したいことが多い — シェアを失っても耐え、少し漏れても安全、というように。Shamir の方式はこれを「曲線」で実現します。秘密を多項式の x=0 での高さに隠し、各パーティに曲線上の点を1つ渡します。t 個の点があれば (t−1) 次の曲線がぴったり1本に決まり、秘密が復元できます。t 個未満だと無数の曲線が当てはまり、秘密は隠れたままです。',
+  },
+  shamirSecretLabel: { en: 'Secret (height at x = 0)', ja: '秘密（x=0 での高さ）' },
+  shamirThresholdLabel: { en: 'Threshold t (points needed)', ja: 'しきい値 t（必要な点の数）' },
+  shamirPartiesLabel: { en: 'Parties n (points handed out)', ja: 'パーティ数 n（配る点の数）' },
+  shamirReshuffle: { en: 'New random curve', ja: '曲線を引き直す' },
+  shamirHint: { en: 'Tap points to use 🟢 or ignore ⚪ them in the recovery', ja: '点をタップして、復元に使う🟢／使わない⚪ を切り替え' },
+  shamirSelected: { en: '{k} of {t} points selected', ja: '{t} 個中 {k} 個を選択中' },
+  shamirRecovered: { en: 'Recovered secret', ja: '復元された秘密' },
+  shamirEnough: {
+    en: 'Enough points (≥ t): the curve is pinned down, secret = {s}.',
+    ja: '点が十分（t 個以上）：曲線が1本に確定し、秘密 = {s}。',
+  },
+  shamirNotEnough: {
+    en: 'Too few points (< t): many curves fit, so the secret cannot be found.',
+    ja: '点が足りません（t 個未満）：当てはまる曲線が無数にあり、秘密は求まりません。',
+  },
+  shamirTooMany: {
+    en: 'Tip: t must not exceed n. Lower t or raise n.',
+    ja: 'ヒント：t は n 以下にしてください。t を下げるか n を上げて。',
+  },
+  shamirPartyPoint: { en: 'P{n}: ({x}, {y})', ja: 'P{n}：({x}, {y})' },
+  shamirVsAdditive: {
+    en: 'Additive sharing (the previous section) is the special case t = n — you need everyone. Shamir generalizes it: pick any t ≤ n. That is why real systems quote things like “3-of-5”.',
+    ja: '前のセクションの加算的秘密分散は、実は t = n の特別な場合（全員必要）です。Shamir はそれを一般化し、t ≤ n を自由に選べます。実システムで「3-of-5」などと言うのはこのためです。',
+  },
+  shamirMath1: {
+    en: 'Make a polynomial f(x) = s + a₁x + … + a_{d}x^{d} of degree d = t−1, with the secret s as the constant term. Party i gets the point (i, f(i)).',
+    ja: '次数 d = t−1 の多項式 f(x) = s + a₁x + … + a_d x^d を作り、定数項に秘密 s を置きます。パーティ i には点 (i, f(i)) を渡します。',
+  },
+  shamirMath2: {
+    en: 'A degree-d curve is fixed by exactly d+1 = t points (two points fix a line, three fix a parabola, …). Given t points, Lagrange interpolation rebuilds f and reads off the secret f(0) = s.',
+    ja: '次数 d の曲線は、ちょうど d+1 = t 個の点で決まります（2点で直線、3点で放物線…）。t 個の点があれば、ラグランジュ補間で f を組み立て直し、秘密 f(0) = s を読み取れます。',
+  },
+  shamirMath3: {
+    en: 'With fewer than t points, every secret value is equally consistent with some valid curve — so the scheme leaks nothing. Real Shamir does all this over a finite field; here we use real numbers so the curve is easy to see.',
+    ja: 't 個未満の点では、どんな秘密の値も「ある正しい曲線」と矛盾しません。だから何も漏れません。本物の Shamir はこれを有限体の上で行います。本デモは曲線が見やすいよう実数で扱っています。',
+  },
 
   // --- 加算的MPCセクション ---
   addHeading: { en: 'Additive MPC: a private sum', ja: '加算的MPC：秘密の合計' },

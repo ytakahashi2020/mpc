@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { LangContext, useT, type Lang, type Key } from './i18n'
 import ModClock from './components/ModClock'
 import SecretSharing from './components/SecretSharing'
+import Shamir from './components/Shamir'
 import AdditiveMPC from './components/AdditiveMPC'
 import RandomMasking from './components/RandomMasking'
 import Millionaires from './components/Millionaires'
@@ -136,6 +137,7 @@ export default function App() {
         <Intro />
         <ModClock />
         <SecretSharing />
+        <Shamir />
         <AdditiveMPC />
         <RandomMasking />
         <Millionaires />

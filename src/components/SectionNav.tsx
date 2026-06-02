@@ -5,6 +5,7 @@ export const SECTIONS: Array<{ id: string; navKey: Key }> = [
   { id: 'intro', navKey: 'navIntro' },
   { id: 'mod', navKey: 'navMod' },
   { id: 'shares', navKey: 'navShares' },
+  { id: 'shamir', navKey: 'navShamir' },
   { id: 'add', navKey: 'navAdd' },
   { id: 'mask', navKey: 'navMask' },
   { id: 'millionaire', navKey: 'navMillionaire' },

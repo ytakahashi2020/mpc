@@ -103,3 +103,35 @@ export function localSums(matrix: number[][]): number[] {
   }
   return sums
 }
+
+// --- Shamir のしきい値秘密分散（t-of-n）。グラフ表示のため実数で扱う教育版 ---
+
+// しきい値 t に対し、切片(=秘密)を s とする t-1 次の多項式の係数を作る。
+// coeffs[0] = s（秘密）、coeffs[1..t-1] = ランダム。f(x)=Σ coeffs[k] x^k。
+export function makePolynomial(secret: number, t: number, rng: () => number): number[] {
+  const coeffs = [secret]
+  for (let k = 1; k < t; k++) {
+    coeffs.push(randInt(rng, 19) - 9) // [-9, 9] の小さな整数係数（グラフが見やすい範囲）
+  }
+  return coeffs
+}
+
+// 多項式を x で評価する。
+export function evalPoly(coeffs: number[], x: number): number {
+  return coeffs.reduce((acc, c, k) => acc + c * Math.pow(x, k), 0)
+}
+
+// 与えられた点 (xs[i], ys[i]) を通る多項式の x=0 での値（=切片=秘密）を
+// ラグランジュ補間で求める。点が t 個（次数+1）あれば一意に正しい秘密が出る。
+export function lagrangeAtZero(xs: number[], ys: number[]): number {
+  let total = 0
+  for (let i = 0; i < xs.length; i++) {
+    let term = ys[i]
+    for (let j = 0; j < xs.length; j++) {
+      if (j === i) continue
+      term *= (0 - xs[j]) / (xs[i] - xs[j])
+    }
+    total += term
+  }
+  return total
+}
