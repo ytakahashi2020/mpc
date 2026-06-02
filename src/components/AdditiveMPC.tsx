@@ -186,19 +186,9 @@ export default function AdditiveMPC() {
         )}
 
         <Detail>
-          <p>
-            Each party <code>i</code> splits its value <code>vᵢ</code> into <code>n</code> shares whose
-            sum is <code>vᵢ</code>, and sends share <code>j</code> to party <code>j</code>.
-          </p>
-          <p>
-            Party <code>j</code> adds all shares it received: <code>tⱼ = Σᵢ matrix[i][j]</code>. Then{' '}
-            <code>Σⱼ tⱼ = Σᵢ Σⱼ matrix[i][j] = Σᵢ vᵢ</code> — the true total, all in{' '}
-            <code>Z_{FIELD_P}</code>.
-          </p>
-          <p>
-            No party ever sees more than one random-looking share of anyone else’s value, so no
-            individual <code>vᵢ</code> leaks.
-          </p>
+          <p>{t('addMath1')}</p>
+          <p>{t('addMath2', { p: FIELD_P })}</p>
+          <p>{t('addMath3')}</p>
         </Detail>
       </div>
       <SectionNav id="add" />

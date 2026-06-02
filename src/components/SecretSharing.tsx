@@ -119,21 +119,9 @@ export default function SecretSharing() {
         <p className="note">{t('sharesNote')}</p>
 
         <Detail>
-          <p>
-            Shares <code>s₁ … sₙ</code> are chosen so that{' '}
-            <code>(s₁ + s₂ + … + sₙ) mod {FIELD_P} = secret</code>.
-          </p>
-          <p>
-            The first <code>n−1</code> shares are drawn uniformly at random from{' '}
-            <code>Z_{FIELD_P}</code> (this demo uses your browser’s cryptographic RNG); the last one is{' '}
-            <code>secret − (s₁ + … + sₙ₋₁) mod {FIELD_P}</code>. Any subset smaller than <code>n</code>{' '}
-            is statistically independent of the secret — it reveals nothing.
-          </p>
-          <p>
-            This is <strong>additive (n-of-n)</strong> sharing: you need <em>every</em> share. Threshold
-            schemes like <strong>Shamir’s</strong> are more general — any <code>t</code> of <code>n</code>{' '}
-            shares can reconstruct, so losing some is survivable.
-          </p>
+          <p>{t('sharesMath1', { p: FIELD_P })}</p>
+          <p>{t('sharesMath2', { p: FIELD_P })}</p>
+          <p>{t('sharesMath3')}</p>
           <p style={{ fontFamily: 'var(--mono)', color: 'var(--accent-2)' }}>
             {shares.join(' + ')} ≡ {secret} (mod {FIELD_P})
           </p>

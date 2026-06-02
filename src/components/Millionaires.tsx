@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useT } from '../i18n'
-import { garbleLabel } from '../mpc'
+import { garbleLabel, FIELD_P } from '../mpc'
 import { Chip, Detail } from './shared'
 
 // 百万長者問題セクション：金額を明かさずに大小だけを判定する体験。
@@ -115,23 +115,9 @@ export default function Millionaires() {
         )}
 
         <Detail>
-          <p>
-            Yao’s original 1982 problem: two parties with private inputs <code>a</code> and{' '}
-            <code>b</code> learn only the bit <code>a ≥ b</code>.
-          </p>
-          <p>
-            In a <strong>garbled circuit</strong>, one party encrypts (“garbles”) a boolean comparison
-            circuit so every wire carries a random-looking label instead of a real <code>0/1</code>.
-            The other party evaluates it via <em>oblivious transfer</em>, learning only the output
-            label — never the inputs. The strings above <strong>stand in for</strong> those opaque wire
-            labels; they are decorative, not a real protocol transcript.
-          </p>
-          <p>
-            <strong>Honesty note:</strong> unlike the previous three sections (which run real{' '}
-            <code>Z_p</code> arithmetic), this section computes the comparison locally as a simplified
-            simulation. Only the final “who is richer” bit is meant to be revealed; the amounts are
-            never displayed.
-          </p>
+          <p>{t('mMath1')}</p>
+          <p>{t('mMath2')}</p>
+          <p>{t('mMath3', { p: FIELD_P })}</p>
         </Detail>
       </div>
     </section>

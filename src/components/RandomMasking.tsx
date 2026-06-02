@@ -83,18 +83,9 @@ export default function RandomMasking() {
         </div>
 
         <Detail>
-          <p>
-            Parties agree on masks <code>m₁ … mₙ</code> with <code>Σ mᵢ ≡ 0 (mod {FIELD_P})</code>.
-            Each publishes <code>pᵢ = (vᵢ + mᵢ) mod {FIELD_P}</code>.
-          </p>
-          <p>
-            Then <code>Σ pᵢ = Σ vᵢ + Σ mᵢ = Σ vᵢ</code>. Each <code>pᵢ</code> alone is uniformly random
-            (because <code>mᵢ</code> is), so it hides <code>vᵢ</code> perfectly.
-          </p>
-          <p>
-            In practice the zero-sum masks come from pairwise shared randomness:{' '}
-            <code>mᵢ = Σⱼ (rᵢⱼ − rⱼᵢ)</code>, which sums to zero by construction.
-          </p>
+          <p>{t('maskMath1', { p: FIELD_P })}</p>
+          <p>{t('maskMath2')}</p>
+          <p>{t('maskMath3')}</p>
         </Detail>
       </div>
       <SectionNav id="mask" />

@@ -159,6 +159,62 @@ export const dict = {
   showDetail: { en: 'Show the math', ja: '数式を見る' },
   hideDetail: { en: 'Hide the math', ja: '数式を隠す' },
 
+  // --- 数式パネル（秘密分散） ---
+  sharesMath1: {
+    en: 'Shares s₁ … sₙ are chosen so that (s₁ + s₂ + … + sₙ) mod {p} = secret.',
+    ja: 'シェア s₁ … sₙ は、(s₁ + s₂ + … + sₙ) mod {p} = 秘密 となるように選びます。',
+  },
+  sharesMath2: {
+    en: 'The first n−1 shares are drawn uniformly at random from Z_{p} (this demo uses your browser’s cryptographic RNG); the last one is secret − (s₁ + … + sₙ₋₁) mod {p}. Any subset smaller than n is statistically independent of the secret — it reveals nothing.',
+    ja: '最初の n−1 個のシェアは Z_{p} から一様ランダムに選びます（本デモはブラウザの暗号学的乱数を使用）。最後の1個は 秘密 − (s₁ + … + sₙ₋₁) mod {p} です。n 個に満たないどの部分集合も秘密と統計的に独立で、何も明かしません。',
+  },
+  sharesMath3: {
+    en: 'This is additive (n-of-n) sharing: you need every share. Threshold schemes like Shamir’s are more general — any t of n shares can reconstruct, so losing some is survivable.',
+    ja: 'これは加算的（n-of-n）秘密分散で、すべてのシェアが必要です。Shamir のような閾値方式はより一般的で、n 個のうち任意の t 個で復元できるため、いくつか失っても耐えられます。',
+  },
+
+  // --- 数式パネル（加算的MPC） ---
+  addMath1: {
+    en: 'Each party i splits its value vᵢ into n shares whose sum is vᵢ, and sends share j to party j.',
+    ja: '各パーティ i は自分の値 vᵢ を、合計が vᵢ になる n 個のシェアに分割し、シェア j をパーティ j に送ります。',
+  },
+  addMath2: {
+    en: 'Party j adds all shares it received: tⱼ = Σᵢ matrix[i][j]. Then Σⱼ tⱼ = Σᵢ Σⱼ matrix[i][j] = Σᵢ vᵢ — the true total, all in Z_{p}.',
+    ja: 'パーティ j は受け取った全シェアを足します： tⱼ = Σᵢ matrix[i][j]。すると Σⱼ tⱼ = Σᵢ Σⱼ matrix[i][j] = Σᵢ vᵢ となり、これが本当の合計です（すべて Z_{p} 上）。',
+  },
+  addMath3: {
+    en: 'No party ever sees more than one random-looking share of anyone else’s value, so no individual vᵢ leaks.',
+    ja: '各パーティは、他人の値については乱数に見えるシェアを1つしか見ないため、個々の vᵢ は漏れません。',
+  },
+
+  // --- 数式パネル（乱数マスキング） ---
+  maskMath1: {
+    en: 'Parties agree on masks m₁ … mₙ with Σ mᵢ ≡ 0 (mod {p}). Each publishes pᵢ = (vᵢ + mᵢ) mod {p}.',
+    ja: '各パーティは Σ mᵢ ≡ 0 (mod {p}) となるマスク m₁ … mₙ を取り決めます。各自は pᵢ = (vᵢ + mᵢ) mod {p} を公開します。',
+  },
+  maskMath2: {
+    en: 'Then Σ pᵢ = Σ vᵢ + Σ mᵢ = Σ vᵢ. Each pᵢ alone is uniformly random (because mᵢ is), so it hides vᵢ perfectly.',
+    ja: 'すると Σ pᵢ = Σ vᵢ + Σ mᵢ = Σ vᵢ。各 pᵢ 単体は（mᵢ がランダムなので）一様ランダムになり、vᵢ を完全に隠します。',
+  },
+  maskMath3: {
+    en: 'In practice the zero-sum masks come from pairwise shared randomness: mᵢ = Σⱼ (rᵢⱼ − rⱼᵢ), which sums to zero by construction.',
+    ja: '実際には、合計0のマスクはペアで共有した乱数から作ります： mᵢ = Σⱼ (rᵢⱼ − rⱼᵢ)。構成上、合計は必ず0になります。',
+  },
+
+  // --- 数式パネル（百万長者問題） ---
+  mMath1: {
+    en: 'Yao’s original 1982 problem: two parties with private inputs a and b learn only the bit a ≥ b.',
+    ja: 'Yao の 1982 年の元問題：秘密の入力 a, b を持つ2者が、a ≥ b というビットだけを知ります。',
+  },
+  mMath2: {
+    en: 'In a garbled circuit, one party encrypts (“garbles”) a boolean comparison circuit so every wire carries a random-looking label instead of a real 0/1. The other party evaluates it via oblivious transfer, learning only the output label — never the inputs. The strings above stand in for those opaque wire labels; they are decorative, not a real protocol transcript.',
+    ja: 'ガーブル回路では、一方が真偽の比較回路を暗号化（「ガーブル」）し、各ワイヤが本物の 0/1 ではなく乱数に見えるラベルを持つようにします。もう一方は紛失通信（oblivious transfer）で評価し、出力ラベルだけを知り、入力は決して知りません。上の文字列はそうした不可読なワイヤラベルの代わりで、装飾であり実際の通信記録ではありません。',
+  },
+  mMath3: {
+    en: 'Honesty note: unlike the previous three sections (which run real Z_{p} arithmetic), this section computes the comparison locally as a simplified simulation. Only the final “who is richer” bit is meant to be revealed; the amounts are never displayed.',
+    ja: '正直な注記：実際の Z_{p} 演算を行う前の3セクションと違い、このセクションは比較をローカルで行う簡略シミュレーションです。明かされるのは「どちらが上か」の最終ビットだけで、金額は一切表示されません。',
+  },
+
   // --- セクション間ナビ ---
   nextSection: { en: 'Next: {name} →', ja: '次へ：{name} →' },
 
