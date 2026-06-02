@@ -91,6 +91,33 @@ export const dict = {
     ja: '復元できません — シェアが隠れています',
   },
 
+  // --- 「素朴な分け方 vs 秘密分散」の比較 ---
+  sharesWhyHeading: { en: 'Wait — isn’t splitting obvious?', ja: 'え、分けるだけって当たり前では？' },
+  sharesWhyIntro: {
+    en: 'Good instinct — but it depends how you split. Compare the same secret split two ways. Look at a single share in each row and ask: does it leak anything about the secret?',
+    ja: 'いい勘です — でも「どう分けるか」で全然違います。同じ秘密を2通りに分けて並べてみましょう。各行の「1つのシェア」を見て、秘密のヒントが漏れているか考えてみてください。',
+  },
+  sharesNaiveLabel: { en: 'Naive split (digits / chunks)', ja: '素朴な分け方（桁・分割）' },
+  sharesNaiveLeak: {
+    en: 'Each piece narrows down the secret — you already know roughly how big it is. Not secure.',
+    ja: '各欠片が秘密を絞り込んでしまう — もうだいたいの大きさが分かる。安全ではない。',
+  },
+  sharesRealLabel: { en: 'Secret sharing (mod {p})', ja: '秘密分散（mod {p}）' },
+  sharesRealSafe: {
+    en: 'Each share is a uniform random number in 0…{max}. Alone it is consistent with EVERY possible secret — it leaks nothing. This is what mod buys you.',
+    ja: '各シェアは 0…{max} の一様な乱数。単体ではどの秘密とも矛盾せず、何も漏れない。これが mod の効果です。',
+  },
+  sharesGuessNaive: { en: 'From this one piece, the secret is around…', ja: 'この欠片だけから、秘密はだいたい…' },
+  sharesGuessReal: { en: 'From this one share, the secret could be…', ja: 'このシェアだけから、秘密は…' },
+  sharesGuessRealAns: { en: 'anything from 0 to {max} 🤷', ja: '0〜{max} の何でもあり得る 🤷' },
+
+  // --- ディーラー（分けた人）に関する注記 ---
+  sharesDealerHeading: { en: 'But doesn’t the person who splits it know?', ja: 'でも、分けた人は分かっちゃうのでは？' },
+  sharesDealer: {
+    en: 'Exactly right. The dealer who creates the shares does know the secret — secret sharing only protects it from the holders afterwards. If nobody is allowed to know the original, you avoid a dealer entirely: each party shares only its OWN value and they compute together. That is exactly what the next section, Additive MPC, does.',
+    ja: 'まさにその通り。シェアを作る「ディーラー（配る人）」は秘密を知っています。秘密分散が守るのは「配られた後の各保管者から」だけです。もし元の秘密を誰にも知られたくないなら、ディーラーを使わず、各自が「自分の値だけ」を分けて配り、みんなで計算します。それがまさに次の「加算的MPC」の章です。',
+  },
+
   // --- mod の導入（時計のたとえ） ---
   modHeading: { en: 'First, a quick idea: clock arithmetic', ja: 'はじめに：時計の足し算' },
   modIntro: {

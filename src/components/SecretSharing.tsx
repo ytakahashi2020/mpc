@@ -27,6 +27,12 @@ export default function SecretSharing() {
   // mod する前の素朴な合計。mod 後（= 秘密）と並べて見せる。
   const rawSum = shares.reduce((a, b) => a + b, 0)
 
+  // 比較用：「素朴な分け方」= ほぼ均等に3分割（各欠片が秘密の大きさを漏らす）。
+  const naiveShares = useMemo(() => {
+    const base = Math.floor(secret / 3)
+    return [base, base, secret - 2 * base]
+  }, [secret])
+
   const toggleHide = (i: number) =>
     setHidden((prev) => {
       const next = new Set(prev)
@@ -123,7 +129,49 @@ export default function SecretSharing() {
         </div>
 
         <p className="note">{t('sharesNote')}</p>
+      </div>
 
+      {/* なぜ「当たり前」ではないのか：素朴な分け方との比較 */}
+      <div className="card" style={{ marginTop: 16 }}>
+        <h3 style={{ margin: '0 0 6px' }}>{t('sharesWhyHeading')}</h3>
+        <p className="lead" style={{ marginBottom: 16 }}>{t('sharesWhyIntro')}</p>
+
+        {/* 素朴な分け方 */}
+        <div className="compare-row compare-bad">
+          <div className="compare-label">❌ {t('sharesNaiveLabel')}</div>
+          <div className="chip-row">
+            {naiveShares.map((s, i) => (
+              <Chip key={i}>{s}</Chip>
+            ))}
+          </div>
+          <div className="sub-line">
+            {t('sharesGuessNaive')} <strong>{Math.floor(secret / 3) * 3}〜{secret}</strong>
+          </div>
+          <div className="compare-verdict bad">{t('sharesNaiveLeak')}</div>
+        </div>
+
+        {/* 秘密分散 */}
+        <div className="compare-row compare-good">
+          <div className="compare-label">⭕ {t('sharesRealLabel', { p: FIELD_P })}</div>
+          <div className="chip-row">
+            {shares.map((s, i) => (
+              <Chip key={i}>{s}</Chip>
+            ))}
+          </div>
+          <div className="sub-line">
+            {t('sharesGuessReal')} <strong>{t('sharesGuessRealAns', { max: FIELD_P - 1 })}</strong>
+          </div>
+          <div className="compare-verdict good">{t('sharesRealSafe', { p: FIELD_P, max: FIELD_P - 1 })}</div>
+        </div>
+      </div>
+
+      {/* 分けた人（ディーラー）は知っている、という注記 */}
+      <div className="card" style={{ marginTop: 16 }}>
+        <h3 style={{ margin: '0 0 6px' }}>{t('sharesDealerHeading')}</h3>
+        <p className="lead" style={{ margin: 0 }}>{t('sharesDealer')}</p>
+      </div>
+
+      <div className="card" style={{ marginTop: 16 }}>
         <Detail>
           <p>{t('sharesMath1', { p: FIELD_P })}</p>
           <p>{t('sharesMath2', { p: FIELD_P })}</p>

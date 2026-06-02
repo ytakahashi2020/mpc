@@ -548,6 +548,38 @@ code {
   font-family: var(--mono);
 }
 
+/* ---------- Compare rows (naive vs secret sharing) ---------- */
+.compare-row {
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.compare-bad {
+  border-color: rgba(255, 122, 144, 0.45);
+  background: rgba(255, 122, 144, 0.07);
+}
+.compare-good {
+  border-color: rgba(139, 233, 192, 0.5);
+  background: rgba(139, 233, 192, 0.07);
+}
+.compare-label {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.compare-verdict {
+  font-size: 13px;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.compare-verdict.bad {
+  color: var(--danger);
+}
+.compare-verdict.good {
+  color: var(--accent-2);
+}
+
 /* ---------- Guess box (millionaires quiz) ---------- */
 .guess-box {
   margin: 14px 0 4px;
