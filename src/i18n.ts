@@ -252,16 +252,16 @@ export const dict = {
 
   // --- 数式パネル（百万長者問題） ---
   mMath1: {
-    en: 'This demo reuses additive sharing. Subtraction is linear, so a share of d = a − b is just (share of a) − (share of b), computed locally. Combining the two shares gives d; its sign answers a ≥ b without exposing a or b.',
-    ja: 'このデモは加算的秘密分散を再利用します。引き算は線形なので、差 d = a − b のシェアは「a のシェア − b のシェア」を手元で計算するだけ。2つのシェアを合わせると d が出て、その符号が a ≥ b の答えになります。a や b は出てきません。',
+    en: 'This demo reuses additive sharing, but with plain integers (shares may be negative) instead of mod-p, so the sign reads off directly. Subtraction is linear, so a share of d = a − b is just (share of a) − (share of b), computed locally. Adding the two shares gives d; its sign answers a ≥ b without exposing a or b.',
+    ja: 'このデモは加算的秘密分散を再利用しますが、mod ではなく「負も許す普通の整数」でシェアを作るので、符号がそのまま読めます。引き算は線形なので、差 d = a − b のシェアは「a のシェア − b のシェア」を手元で計算するだけ。2つのシェアを足すと d が出て、その符号が a ≥ b の答えになります。a や b は出てきません。',
   },
   mMath2: {
     en: 'Yao’s original 1982 formulation uses a garbled circuit instead: one party encrypts a comparison circuit so each wire carries a random-looking label, and the other evaluates it via oblivious transfer, learning only the output bit. Same goal, different machinery.',
     ja: 'Yao の 1982 年の元の定式化では、代わりにガーブル回路を使います。一方が比較回路を暗号化して各ワイヤを乱数に見えるラベルにし、もう一方が紛失通信（OT）で評価して出力ビットだけを知ります。目的は同じで、仕組みが違います。',
   },
   mMath3: {
-    en: 'Honesty note: revealing the exact value of d leaks a little more than the bare “who is richer” bit (e.g. the gap size). Production protocols compare without revealing d itself; here we show d’s sign to keep the idea visible.',
-    ja: '正直な注記：d の正確な値を見せると、「どちらが上か」の1ビットより少しだけ多く（差の大きさなど）漏れます。実運用では d 自体を見せずに比較します。本デモは仕組みを見せるため d の符号まで表示しています。',
+    en: 'Honesty note: revealing the exact value of d leaks a little more than the bare “who is richer” bit (e.g. the gap size). Production protocols compare without revealing d itself, and over a finite field comparison is genuinely tricky (a wrapped value like p−1 means −1). We use plain signed integers here so the sign is obvious.',
+    ja: '正直な注記：d の正確な値を見せると、「どちらが上か」の1ビットより少しだけ多く（差の大きさなど）漏れます。実運用では d 自体を見せずに比較します。また有限体の上では比較は本当に厄介で（一周した値 p−1 は −1 を意味する）、本デモはそこを避けて符号が一目で分かる普通の整数を使っています。',
   },
 
   // --- セクション間ナビ ---

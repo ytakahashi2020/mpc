@@ -38,6 +38,21 @@ export function mod(n: number, p = FIELD_P): number {
   return ((n % p) + p) % p
 }
 
+// 「負の数も許す」整数シェアに分割する（百万長者問題で差の符号を素直に読むため）。
+// mod を使わないので、シェアどうしを普通に足し引きでき、合計＝secret がそのまま成り立つ。
+// 先頭 n-1 個は [-spread, spread] のランダム整数、最後の1個で辻褄を合わせる。
+export function signedShares(secret: number, n: number, rng: () => number, spread = 12): number[] {
+  const shares: number[] = []
+  let acc = 0
+  for (let i = 0; i < n - 1; i++) {
+    const r = randInt(rng, 2 * spread + 1) - spread // [-spread, +spread]
+    shares.push(r)
+    acc += r
+  }
+  shares.push(secret - acc) // 残りで合計を secret に合わせる
+  return shares
+}
+
 // secret を n 個の加算的シェアに分割する。
 // 先頭 n-1 個はランダム、最後の1個で辻褄を合わせる。合計（mod p）が secret に一致する。
 export function additiveShares(secret: number, n: number, rng: () => number): number[] {

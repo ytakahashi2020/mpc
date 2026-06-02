@@ -1,13 +1,19 @@
 import { useMemo, useState } from 'react'
 import { useT, type Key } from '../i18n'
-import { additiveShares, mod, makeRng, FIELD_P } from '../mpc'
+import { signedShares, makeRng } from '../mpc'
 import { Chip, Detail, partyColor } from './shared'
 import { SectionNav } from './SectionNav'
 
 // 百万長者問題セクション：金額を明かさずに大小だけを判定する。
-// 方式：加算的シェアで差 d = Alice − Bob を秘密計算し、その「符号」だけを公開する。
+// 方式：差 d = Alice − Bob を「負も許す整数シェア」で秘密計算し、その符号だけを公開する。
+// mod を使わないので、シェアどうしを普通に足し引きでき、符号がそのまま読める。
 // （前セクションのシェアの仕組みがそのまま使える＝学びが地続きになる）
 type Guess = 'alice' | 'bob' | 'equal' | null
+
+// 符号付きの数を見やすく整形（+12, -3 のように）。
+const fmt = (n: number) => (n >= 0 ? `+${n}` : `${n}`)
+// a + b を「a − |b|」/「a + b」の自然な式に整形。
+const term = (n: number) => (n >= 0 ? `+ ${n}` : `− ${Math.abs(n)}`)
 
 export default function Millionaires() {
   const { t } = useT()
@@ -17,17 +23,17 @@ export default function Millionaires() {
   const [step, setStep] = useState(0) // 0=未実行, 1..3
   const [seed, setSeed] = useState(1)
 
-  // 各財産を2つのシェアに分割。P1(Alice) が [0]、P2(Bob) が [1] を保持する慣習。
+  // 各財産を「負も許す」2つのシェアに分割。P1(Alice) が [0]、P2(Bob) が [1] を保持する慣習。
   const { aShares, bShares } = useMemo(() => {
     const rng = makeRng()
-    return { aShares: additiveShares(alice, 2, rng), bShares: additiveShares(bob, 2, rng) }
+    return { aShares: signedShares(alice, 2, rng), bShares: signedShares(bob, 2, rng) }
   }, [alice, bob, seed])
 
   // 各パーティが手元で計算する「差 d のシェア」 = 自分が持つ Alice のシェア − Bob のシェア。
-  const diffShares = [mod(aShares[0] - bShares[0]), mod(aShares[1] - bShares[1])]
-  // 復元される d（体の上での値）。符号判定には本当の差を使う。
-  const trueDiff = alice - bob
-  const sign = trueDiff > 0 ? 'pos' : trueDiff < 0 ? 'neg' : 'zero'
+  // mod しないので、2つを普通に足すと差 d そのものになる。
+  const diffShares = [aShares[0] - bShares[0], aShares[1] - bShares[1]]
+  const d = diffShares[0] + diffShares[1] // = alice - bob
+  const sign = d > 0 ? 'pos' : d < 0 ? 'neg' : 'zero'
 
   const reset = () => setStep(0)
   const resultKey: Key =
@@ -163,11 +169,11 @@ export default function Millionaires() {
                         <span className="party-name">{who === 0 ? 'Alice' : 'Bob'}</span>
                       </div>
                       <div className="sub-line">
-                        {aShares[who]} − {bShares[who]} ≡ {diffShares[who]} (mod {FIELD_P})
+                        ({fmt(aShares[who])}) − ({fmt(bShares[who])}) = {fmt(diffShares[who])}
                       </div>
                       <div style={{ marginTop: 8 }}>
                         <span className="chip-label">{t('mDiffShare', { n: who + 1 })}</span>
-                        <Chip flash>{diffShares[who]}</Chip>
+                        <Chip flash>{fmt(diffShares[who])}</Chip>
                       </div>
                     </div>
                   ))}
@@ -181,6 +187,10 @@ export default function Millionaires() {
                 <div className="step-label">{t('mStep3')}</div>
                 <p className="hint-line">{t('mStep3Body')}</p>
 
+                {/* 差シェアを普通に足して d を出す（mod なし） */}
+                <div className="sub-line" style={{ marginTop: 8 }}>
+                  d = ({fmt(diffShares[0])}) {term(diffShares[1])} = {fmt(d)}
+                </div>
                 <div className="small" style={{ marginTop: 8 }}>
                   {t('mSignLabel')}
                 </div>
@@ -210,7 +220,7 @@ export default function Millionaires() {
         <Detail>
           <p>{t('mMath1')}</p>
           <p>{t('mMath2')}</p>
-          <p>{t('mMath3', { p: FIELD_P })}</p>
+          <p>{t('mMath3')}</p>
         </Detail>
       </div>
       <SectionNav id="millionaire" />
